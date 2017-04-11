@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -21,7 +22,7 @@ public class InputActivity extends AppCompatActivity
 {
     private EditText spaceName, spaceWeight, spaceSport, spaceSleep, spaceWake;
     private Spinner spinnerSex,spinnerAge;
-    private RadioButton lessButton;
+    private CheckBox lessButton;
 
     private String name;
     private boolean lessnotif, male; //male = true, female = false;
@@ -39,7 +40,7 @@ public class InputActivity extends AppCompatActivity
         spinnerAge=(Spinner) findViewById(R.id.age_spinner);
         spaceSleep=(EditText) findViewById(R.id.sleep_time);
         spaceWake=(EditText) findViewById(R.id.wake_time);
-        lessButton=(RadioButton) findViewById(R.id.less_notify);
+        lessButton=(CheckBox) findViewById(R.id.less_notify);
 
 
         ArrayAdapter<CharSequence> sex_adapter = ArrayAdapter.createFromResource(this, R.array.sex_array, android.R.layout.simple_spinner_item);

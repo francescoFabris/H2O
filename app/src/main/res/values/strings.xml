@@ -12,5 +12,6 @@
     <string name="str2">GLASSES OF WATER TODAY</string>
     <string name="c1">you could do better</string>
     <string name="c2">good job</string>
+    <string name="less_notify">Less Notifications</string>
 
 </resources>
