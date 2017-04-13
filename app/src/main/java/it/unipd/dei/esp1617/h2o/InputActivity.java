@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -31,6 +30,7 @@ import android.widget.ImageSwitcher;
 
 public class InputActivity extends AppCompatActivity
 {
+<<<<<<< HEAD
     /*
     private EditText spaceName, spaceWeight, spaceSport, spaceSleep, spaceWake;
     private Spinner spinnerSex,spinnerAge;
@@ -48,6 +48,8 @@ public class InputActivity extends AppCompatActivity
     */
 >>>>>>> refs/remotes/origin/master
 
+=======
+>>>>>>> refs/remotes/origin/master
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,7 @@ public class InputActivity extends AppCompatActivity
 
         //EditText
         spaceName.setText(name);
-        spaceWeight.setText(weight);
+        spaceWeight.setText(""+weight);
         //spaceSport.setText();
         //spaceSleep.setText();
         //spaceSleep.setText();
@@ -133,12 +135,13 @@ public class InputActivity extends AppCompatActivity
         EditText spaceName=(EditText) findViewById(R.id.name_space);
         String name = spaceName.getText().toString();
 
+        //salvataggio dello stato persistente
         editor.putInt("age_value",age);
         editor.putInt("weight_value",weight);
         editor.putBoolean("lessnot_value",lessnot);
         editor.putBoolean("male_value",male);
         editor.putString("name_value",name);
-
+        //salvataggio in mutua esclusione
         editor.commit();
     }
 
