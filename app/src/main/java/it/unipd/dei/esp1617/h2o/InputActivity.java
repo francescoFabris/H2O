@@ -13,7 +13,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+<<<<<<< HEAD
 import java.util.Calendar;
+=======
+import android.widget.ImageSwitcher;
+
+
+>>>>>>> refs/remotes/origin/master
 
 /**
  * Created by boemd on 04/04/2017.
@@ -30,6 +36,8 @@ public class InputActivity extends AppCompatActivity
     private int age, weight;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +50,7 @@ public class InputActivity extends AppCompatActivity
         spaceSleep=(EditText) findViewById(R.id.sleep_time);
         spaceWake=(EditText) findViewById(R.id.wake_time);
         lessButton=(CheckBox) findViewById(R.id.less_notify);
+
 
 
         ArrayAdapter<CharSequence> sex_adapter = ArrayAdapter.createFromResource(this, R.array.sex_array, android.R.layout.simple_spinner_item);
