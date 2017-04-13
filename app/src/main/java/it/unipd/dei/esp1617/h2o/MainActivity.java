@@ -1,7 +1,7 @@
 package it.unipd.dei.esp1617.h2o;
 
-import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,14 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private Button bu;
     private TextView tv1,tv2,tv3,tv4;
     private FloatingActionButton faplus, faminus;
-    private int drunkGlasses =0;
-    private ImageView miaImmagine;
+    private static int drunkGlasses;
 
     public Button mButtonIn;
     private ProgressBar mProgressBar;
@@ -26,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         mButtonIn = (Button) findViewById(R.id.apri_second);
         mButtonIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,19 +35,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //mProgressBar = (ProgressBar) findViewById(R.id.ProgressBar);
+=======
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        drunkGlasses=preferences.getInt("drunk_glasses",0);
+>>>>>>> refs/remotes/origin/master
 
         tv1 = (TextView) findViewById(R.id.textView1);
         tv2 = (TextView) findViewById(R.id.textView2);
         tv3 = (TextView) findViewById(R.id.textView3);
         tv4 = (TextView) findViewById(R.id.textView4);
-        tv2.setText((CharSequence) bu);
-        tv4.setText((drunkGlasses>5)?"\"@string/c2\"":"\"@string/c1\"");
+        changeViewsText();
 
-
-                bu = (Button) findViewById(R.id.apri_second);
-        /**
-         * Passaggio all'activity per l'acquisizione delle informazioni sull'utente
-         */
+        bu = (Button) findViewById(R.id.apri_second);
         bu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        miaImmagine = (ImageView) findViewById(R.id.image);
-        miaImmagine.setImageResource(R.drawable.bicchiere);
-
         faplus = (FloatingActionButton)findViewById(R.id.plus_button);
         faminus = (FloatingActionButton)findViewById(R.id.minus_button);
         /**
@@ -69,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         faplus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                drunkGlasses++;
+                incrementGlasses();
             }
         });
         /**
@@ -78,11 +73,35 @@ public class MainActivity extends AppCompatActivity {
         faminus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                drunkGlasses--;
+                decrementGlasses();
             }
         });
 
 
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("drunk_glasses",drunkGlasses);
+        editor.commit();
+    }
+
+    public void incrementGlasses(){
+        drunkGlasses++;
+        changeViewsText();
+    }
+    public void decrementGlasses(){
+        drunkGlasses--;
+        changeViewsText();
+    }
+    public void changeViewsText(){
+        tv2.setText(drunkGlasses+"");
+        tv4.setText((drunkGlasses>5)?R.string.c2:R.string.c1);
+    }
+>>>>>>> refs/remotes/origin/master
 }

@@ -1,5 +1,6 @@
 package it.unipd.dei.esp1617.h2o;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,11 +15,14 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.Calendar;
 =======
 import android.widget.ImageSwitcher;
 
 
+>>>>>>> refs/remotes/origin/master
+=======
 >>>>>>> refs/remotes/origin/master
 
 /**
@@ -27,8 +31,10 @@ import android.widget.ImageSwitcher;
 
 public class InputActivity extends AppCompatActivity
 {
+    /*
     private EditText spaceName, spaceWeight, spaceSport, spaceSleep, spaceWake;
     private Spinner spinnerSex,spinnerAge;
+<<<<<<< HEAD
     private CheckBox lessButton;
 
     private String name;
@@ -37,11 +43,16 @@ public class InputActivity extends AppCompatActivity
 
 
 
+=======
+    private CheckBox checkNot;
+    */
+>>>>>>> refs/remotes/origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
+<<<<<<< HEAD
         spaceName=(EditText) findViewById(R.id.name_space);
         spaceWeight=(EditText) findViewById(R.id.weight);
         spaceSport=(EditText) findViewById(R.id.sport_time);
@@ -52,56 +63,83 @@ public class InputActivity extends AppCompatActivity
         lessButton=(CheckBox) findViewById(R.id.less_notify);
 
 
+=======
+>>>>>>> refs/remotes/origin/master
 
+        //dati persistenti salvati come SharedpPeferences
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        int age = preferences.getInt("age_value",0);
+        int weight = preferences.getInt("weight_value",50);
+        boolean lessnot = preferences.getBoolean("lessnot_value",false);
+        boolean male = preferences.getBoolean("male_value",false);  //male = true, female = false;
+        String name = preferences.getString("name_value", "Al Bano Carrisi");
+        //mancano gli orari!!
+
+        EditText spaceName=(EditText) findViewById(R.id.name_space);
+        EditText spaceWeight=(EditText) findViewById(R.id.weight);
+        EditText spaceSport=(EditText) findViewById(R.id.sport_time);
+        Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
+        Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
+        EditText spaceSleep=(EditText) findViewById(R.id.sleep_time);
+        EditText spaceWake=(EditText) findViewById(R.id.wake_time);
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
+
+        //EditText
+        spaceName.setText(name);
+        spaceWeight.setText(weight);
+        //spaceSport.setText();
+        //spaceSleep.setText();
+        //spaceSleep.setText();
+
+        //CheckBox
+        checkNot.setChecked(lessnot);
+
+        //Spinner
         ArrayAdapter<CharSequence> sex_adapter = ArrayAdapter.createFromResource(this, R.array.sex_array, android.R.layout.simple_spinner_item);
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSex.setAdapter(sex_adapter);
+        //inutile per il momento
+        if(spinnerSex.getSelectedItemPosition()==1)
+            male=true;
+
 
         ArrayAdapter<CharSequence> years_adapter = ArrayAdapter.createFromResource(this, R.array.years_array, android.R.layout.simple_spinner_item);
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(years_adapter);
+        //inutile per il momento
+        age = spinnerAge.getSelectedItemPosition();
 
-        spinnerAge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                age = position;
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                age = 0;
-            }
-        });
+    }
 
-        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                male = (position==0)? false:true;
-            }
+    @SuppressLint("CommitPrefsEdit")
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                male = false;
-            }
-        });
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
-        spaceName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                spaceName = null;
-            }
+        //references dei widgets per leggerne lo stato
+        Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
+        int age = spinnerAge.getSelectedItemPosition();
+        EditText spaceWeight=(EditText) findViewById(R.id.weight);
+        int weight = Integer.parseInt(spaceWeight.getText().toString());
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
+        boolean lessnot = checkNot.isChecked();
+        Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
+        boolean male = (spinnerSex.getSelectedItemPosition()==1)?true:false;
+        EditText spaceName=(EditText) findViewById(R.id.name_space);
+        String name = spaceName.getText().toString();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spaceName = (EditText) s;
-            }
+        editor.putInt("age_value",age);
+        editor.putInt("weight_value",weight);
+        editor.putBoolean("lessnot_value",lessnot);
+        editor.putBoolean("male_value",male);
+        editor.putString("name_value",name);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                spaceName = (EditText) s;
-            }
-        });
-
+        editor.commit();
     }
 
 
