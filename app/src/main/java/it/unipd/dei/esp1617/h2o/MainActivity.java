@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-<<<<<<< HEAD
 import android.widget.ProgressBar;
-=======
 import android.widget.TextView;
->>>>>>> refs/remotes/origin/master
 
 public class MainActivity extends AppCompatActivity {
     private Button bu;
@@ -25,9 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
 
-        mButtonIn = (Button) findViewById(R.id.buttonIn);
+        mButtonIn = (Button) findViewById(R.id.apri_second);
         mButtonIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mProgressBar = (ProgressBar) findViewById(R.id.ProgressBar);
+        //mProgressBar = (ProgressBar) findViewById(R.id.ProgressBar);
 
-=======
         tv1 = (TextView) findViewById(R.id.textView1);
         tv2 = (TextView) findViewById(R.id.textView2);
         tv3 = (TextView) findViewById(R.id.textView3);
@@ -79,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 drunkGlasses--;
             }
         });
->>>>>>> refs/remotes/origin/master
+
+
     }
 
 }
