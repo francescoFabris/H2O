@@ -13,16 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import java.util.Calendar;
-=======
 import android.widget.ImageSwitcher;
 
-
->>>>>>> refs/remotes/origin/master
-=======
->>>>>>> refs/remotes/origin/master
 
 /**
  * Created by boemd on 04/04/2017.
@@ -30,31 +23,22 @@ import android.widget.ImageSwitcher;
 
 public class InputActivity extends AppCompatActivity
 {
-<<<<<<< HEAD
-    /*
+
     private EditText spaceName, spaceWeight, spaceSport, spaceSleep, spaceWake;
     private Spinner spinnerSex,spinnerAge;
-<<<<<<< HEAD
     private CheckBox lessButton;
 
     private String name;
     private boolean lessnotif, male; //male = true, female = false;
     private int age, weight;
 
-
-
-=======
     private CheckBox checkNot;
-    */
->>>>>>> refs/remotes/origin/master
 
-=======
->>>>>>> refs/remotes/origin/master
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
-<<<<<<< HEAD
         spaceName=(EditText) findViewById(R.id.name_space);
         spaceWeight=(EditText) findViewById(R.id.weight);
         spaceSport=(EditText) findViewById(R.id.sport_time);
@@ -64,9 +48,6 @@ public class InputActivity extends AppCompatActivity
         spaceWake=(EditText) findViewById(R.id.wake_time);
         lessButton=(CheckBox) findViewById(R.id.less_notify);
 
-
-=======
->>>>>>> refs/remotes/origin/master
 
         //dati persistenti salvati come SharedpPeferences
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -84,7 +65,7 @@ public class InputActivity extends AppCompatActivity
         Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
         EditText spaceSleep=(EditText) findViewById(R.id.sleep_time);
         EditText spaceWake=(EditText) findViewById(R.id.wake_time);
-        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notify);
 
         //EditText
         spaceName.setText(name);
@@ -128,7 +109,7 @@ public class InputActivity extends AppCompatActivity
         int age = spinnerAge.getSelectedItemPosition();
         EditText spaceWeight=(EditText) findViewById(R.id.weight);
         int weight = Integer.parseInt(spaceWeight.getText().toString());
-        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notify);
         boolean lessnot = checkNot.isChecked();
         Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
         boolean male = (spinnerSex.getSelectedItemPosition()==1)?true:false;

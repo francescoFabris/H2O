@@ -3,6 +3,7 @@ package it.unipd.dei.esp1617.h2o;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
         mButtonIn = (Button) findViewById(R.id.apri_second);
         mButtonIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,10 +35,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //mProgressBar = (ProgressBar) findViewById(R.id.ProgressBar);
-=======
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         drunkGlasses=preferences.getInt("drunk_glasses",0);
->>>>>>> refs/remotes/origin/master
 
         tv1 = (TextView) findViewById(R.id.textView1);
         tv2 = (TextView) findViewById(R.id.textView2);
@@ -76,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
-=======
     @Override
     protected void onPause(){
         super.onPause();
@@ -99,5 +95,5 @@ public class MainActivity extends AppCompatActivity {
         tv2.setText(""+drunkGlasses);
         tv4.setText((drunkGlasses>5)?R.string.c2:R.string.c1);
     }
->>>>>>> refs/remotes/origin/master
 }
+
