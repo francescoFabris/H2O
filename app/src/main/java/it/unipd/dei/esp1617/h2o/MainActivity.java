@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private Button bu;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     InputActivity FirstHour = new InputActivity();
     InputActivity FirstMin = new InputActivity();
     private PendingIntent pendingIntent;
-    private AlarmManager mAlarmManager;
+    //private AlarmManager mAlarmManager;
 
     int hour = Hour.TimeHour();
     int min = Min.TimeMin();
@@ -88,11 +89,13 @@ public class MainActivity extends AppCompatActivity {
         long intendedTime = firingCal.getTimeInMillis();
         long currentTime = currentCal.getTimeInMillis();
 
-        mAlarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(MainActivity.this, MyReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+        Intent AlarmIntent = new Intent(MainActivity.this, MyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, AlarmIntent, 0);
 
-        mAlarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_HOUR, pendingIntent);
+        AlarmManager mAlarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, intendedTime, AlarmManager.INTERVAL_HOUR, pendingIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_LONG).show();
     }
 
     @Override
