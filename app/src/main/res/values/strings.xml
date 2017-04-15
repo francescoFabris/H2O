@@ -14,5 +14,7 @@
     <string name="c1">you could do better</string>
     <string name="c2">good job</string>
     <string name="less_notify">Less Notifications</string>
+    <string name="toast_name">Nome troppo lungo!</string>
+    <string name="toast_weight">Metti il tuo vero peso!</string>
 
 </resources>

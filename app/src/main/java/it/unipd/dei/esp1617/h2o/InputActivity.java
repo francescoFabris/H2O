@@ -299,6 +299,7 @@ public class InputActivity extends AppCompatActivity
     public int TimeFirstMinute(){
         return minW;
     }
+
     public int SportHour(){
         return hourSp;
     }
