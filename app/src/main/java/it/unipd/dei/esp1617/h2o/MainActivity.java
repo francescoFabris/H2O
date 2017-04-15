@@ -1,14 +1,17 @@
 package it.unipd.dei.esp1617.h2o;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import java.io.FileReader;
+import java.util.Calendar;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,25 +19,25 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv1,tv2,tv3,tv4;
     private FloatingActionButton faplus, faminus;
     private static int drunkGlasses;
+    InputActivity Hour = new InputActivity();
+    InputActivity Min = new InputActivity();
+    InputActivity FirstHour = new InputActivity();
+    InputActivity FirstMin = new InputActivity();
+    private PendingIntent pendingIntent;
+    private AlarmManager mAlarmManager;
 
-    public Button mButtonIn;
-    private ProgressBar mProgressBar;
+    int hour = Hour.TimeHour();
+    int min = Min.TimeMin();
+    int HourW = FirstHour.TimeFirstHour();
+    int MinW = FirstMin.TimeFirstMinute();
+    Calendar firingCal= Calendar.getInstance();
+    Calendar currentCal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mButtonIn = (Button) findViewById(R.id.apri_second);
-        mButtonIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_input);
-            }
-        });
-
-        //mProgressBar = (ProgressBar) findViewById(R.id.ProgressBar);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         drunkGlasses=preferences.getInt("drunk_glasses",0);
 
@@ -70,8 +73,26 @@ public class MainActivity extends AppCompatActivity {
                 decrementGlasses();
             }
         });
+        /*
+        Intent myIntent = new Intent(MainActivity.this, MyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent,0);
 
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        */
+        firingCal.setTimeInMillis(System.currentTimeMillis());
+        firingCal.set(Calendar.HOUR, HourW);
+        firingCal.set(Calendar.MINUTE, MinW);
+        firingCal.set(Calendar.SECOND, 0);
 
+        long intendedTime = firingCal.getTimeInMillis();
+        long currentTime = currentCal.getTimeInMillis();
+
+        mAlarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(MainActivity.this, MyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+        mAlarmManager.setRepeating(AlarmManager.RTC, intendedTime, AlarmManager.INTERVAL_HOUR, pendingIntent);
     }
 
     @Override
@@ -98,5 +119,11 @@ public class MainActivity extends AppCompatActivity {
         tv2.setText(Integer.toString(drunkGlasses));
         tv4.setText((drunkGlasses>5)?R.string.c2:R.string.c1);
     }
+
+    public void GlassPerHour (){
+        int GlassPerHour = drunkGlasses/hour;// calcola i bicchieri all'ora da bere
+
+    }
+
 }
 

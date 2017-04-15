@@ -1,6 +1,7 @@
 package it.unipd.dei.esp1617.h2o;
 
 import android.annotation.SuppressLint;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,9 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import java.util.Calendar;
-import android.widget.ImageSwitcher;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.util.Calendar;
 
 /**
  * Created by boemd on 04/04/2017.
@@ -23,31 +25,16 @@ import android.widget.ImageSwitcher;
 
 public class InputActivity extends AppCompatActivity
 {
+    private boolean toastNameSent,toastWeightSent;
 
-    private EditText spaceName, spaceWeight, spaceSport, spaceSleep, spaceWake;
-    private Spinner spinnerSex,spinnerAge;
-    private CheckBox lessButton;
-
-    private String name;
-    private boolean lessnotif, male; //male = true, female = false;
-    private int age, weight;
-
-    private CheckBox checkNot;
+    int hourS = -1, minS = -1, hourW = -1, minW = -1, hourSp = -1, minSp = -1;
+    static final int TIME_DIALOG_ID = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
-        spaceName=(EditText) findViewById(R.id.name_space);
-        spaceWeight=(EditText) findViewById(R.id.weight);
-        spaceSport=(EditText) findViewById(R.id.sport_time);
-        spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
-        spinnerAge=(Spinner) findViewById(R.id.age_spinner);
-        spaceSleep=(EditText) findViewById(R.id.sleep_time);
-        spaceWake=(EditText) findViewById(R.id.wake_time);
-        lessButton=(CheckBox) findViewById(R.id.less_notify);
-
 
         //dati persistenti salvati come SharedpPeferences
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -58,42 +45,184 @@ public class InputActivity extends AppCompatActivity
         String name = preferences.getString("name_value", "Al Bano Carrisi");
         //mancano gli orari!!
 
-        EditText spaceName=(EditText) findViewById(R.id.name_space);
+        //aggancio widget con IDs
+        final EditText spaceName=(EditText) findViewById(R.id.name_space);
         EditText spaceWeight=(EditText) findViewById(R.id.weight);
         EditText spaceSport=(EditText) findViewById(R.id.sport_time);
         Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
-        Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
+        final Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
         EditText spaceSleep=(EditText) findViewById(R.id.sleep_time);
         EditText spaceWake=(EditText) findViewById(R.id.wake_time);
-        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notify);
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
+
+        //CheckBox
+        checkNot.setChecked(lessnot);
 
         //EditText
+        if(name==""||name==null)
+        {
+            name="Al Bano Carrisi";
+        }
         spaceName.setText(name);
-        spaceWeight.setText(""+weight);
+        spaceWeight.setText(Integer.toString(weight)); //Non è stato messo l'Integer puro perché causava un bug nell'apertura
         //spaceSport.setText();
         //spaceSleep.setText();
         //spaceSleep.setText();
 
-        //CheckBox
-        checkNot.setChecked(lessnot);
+        spaceName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!isToastNameSent()&&s.toString().length()>20){
+                    Toast.makeText(InputActivity.this, R.string.toast_name, Toast.LENGTH_SHORT).show();
+                    setToastNameSent();
+                }
+
+            }
+        });
+
+        spaceWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!isToastWeightSent()&&Integer.parseInt(s.toString())>199){
+                    Toast.makeText(InputActivity.this, R.string.toast_weight,Toast.LENGTH_SHORT).show();
+                    setToastWeightSent();
+                }
+
+            }
+        });
 
         //Spinner
         ArrayAdapter<CharSequence> sex_adapter = ArrayAdapter.createFromResource(this, R.array.sex_array, android.R.layout.simple_spinner_item);
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSex.setAdapter(sex_adapter);
-        //inutile per il momento
-        if(spinnerSex.getSelectedItemPosition()==1)
-            male=true;
+        spinnerSex.setSelection(male?1:0);
 
 
         ArrayAdapter<CharSequence> years_adapter = ArrayAdapter.createFromResource(this, R.array.years_array, android.R.layout.simple_spinner_item);
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(years_adapter);
-        //inutile per il momento
-        age = spinnerAge.getSelectedItemPosition();
+        spinnerAge.setSelection(age);
+        //quello che segue è inutile, ma per il momento lo lascio perché non si sa mai
+        /*
+        spinnerAge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerAge.setSelection(spinnerAge.getSelectedItemPosition());
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        */
+
+        spaceSleep.setOnClickListener(new EditText.OnClickListener() {
+            public void onClick(View v) {
+                if (hourS == -1 || minS == -1) {
+                    Calendar c = Calendar.getInstance();
+                    hourS = c.get(Calendar.HOUR);
+                    minS = c.get(Calendar.MINUTE);
+                }
+
+                showTimeDialogS(v, hourS, minS);
+            }
+        });
+
+        spaceWake.setOnClickListener(new EditText.OnClickListener() {
+            public void onClick(View v) {
+                if (hourW == -1 || minW == -1) {
+                    Calendar c = Calendar.getInstance();
+                    hourW = c.get(Calendar.HOUR);
+                    minW = c.get(Calendar.MINUTE);
+                }
+
+                showTimeDialogW(v, hourW, minW);
+            }
+        });
+
+        spaceSport.setOnClickListener(new EditText.OnClickListener() {
+            public void onClick(View v) {
+                if (hourSp == -1 || minSp == -1) {
+                    Calendar c = Calendar.getInstance();
+                    hourSp = c.get(Calendar.HOUR);
+                    minSp = c.get(Calendar.MINUTE);
+                }
+
+                showTimeDialogSp(v, hourSp, minSp);
+            }
+        });
     }
+
+    public void showTimeDialogS(View v, int hour, int min) {
+        (new TimePickerDialog(InputActivity.this, timeSetListenerS, hour, min, true)).show();
+    };
+
+    private TimePickerDialog.OnTimeSetListener timeSetListenerS = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+        {
+            hourS = hourOfDay;
+            minS = minute;
+            EditText spaceSleep = (EditText) findViewById(R.id.sleep_time);
+            spaceSleep.setText(hourS + " : " + minS);
+
+        }
+    };
+
+    public void showTimeDialogW(View v, int hour, int min) {
+        (new TimePickerDialog(InputActivity.this, timeSetListenerW, hour, min, true)).show();
+    };
+
+    private TimePickerDialog.OnTimeSetListener timeSetListenerW = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+        {
+            hourW = hourOfDay;
+            minW = minute;
+            EditText spaceWake = (EditText) findViewById(R.id.wake_time);
+            spaceWake.setText(hourW + " : " + minW);
+
+        }
+    };
+
+    public void showTimeDialogSp(View v, int hour, int min) {
+        (new TimePickerDialog(InputActivity.this, timeSetListenerSp, hour, min, true)).show();
+    };
+
+    private TimePickerDialog.OnTimeSetListener timeSetListenerSp = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+        {
+            hourSp = hourOfDay;
+            minSp = minute;
+            EditText spaceSleep = (EditText) findViewById(R.id.sport_time);
+            spaceSleep.setText(hourSp + " : " + minSp);
+
+        }
+    };
+
+
 
     @SuppressLint("CommitPrefsEdit")
     @Override
@@ -109,7 +238,7 @@ public class InputActivity extends AppCompatActivity
         int age = spinnerAge.getSelectedItemPosition();
         EditText spaceWeight=(EditText) findViewById(R.id.weight);
         int weight = Integer.parseInt(spaceWeight.getText().toString());
-        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notify);
+        CheckBox checkNot = (CheckBox) findViewById(R.id.less_notifications);
         boolean lessnot = checkNot.isChecked();
         Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
         boolean male = (spinnerSex.getSelectedItemPosition()==1)?true:false;
@@ -126,5 +255,55 @@ public class InputActivity extends AppCompatActivity
         editor.commit();
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();           //i metodi "not-setter" del controllo dei toast vengono chiamati in onResume() così da poter venire chiamati
+        setToastNameNotSent();      //ogni volta che l'InputActivity viene riaperta
+        setToastWeightNotSent();
+    }
 
+    //metodi di controllo del flusso dei Toast
+    private boolean isToastNameSent(){
+        return toastNameSent;
+    }
+    private boolean isToastWeightSent(){
+        return toastWeightSent;
+    }
+    private void setToastNameSent(){
+        toastNameSent = true;
+    }
+    private void setToastWeightSent() {
+        toastWeightSent = true;
+    }
+    private void setToastNameNotSent(){
+        toastNameSent=false;
+    }
+    private void setToastWeightNotSent(){
+        toastWeightSent=false;
+    }
+
+    public int TimeHour(){
+        int Hour = hourS - hourW;
+        return Hour;
+    }
+
+    public int TimeMin(){
+        int Min = minS - minW;
+        return Min;
+    }
+
+    public int TimeFirstHour(){
+        return hourW;
+    }
+
+    public int TimeFirstMinute(){
+        return minW;
+    }
+    public int SportHour(){
+        return hourSp;
+    }
+
+    public int SportMin(){
+        return minSp;
+    }
 }

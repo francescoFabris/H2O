@@ -189,7 +189,7 @@
         app:layout_constraintTop_toBottomOf="@+id/sport_time"/>
 
     <CheckBox
-        android:id="@+id/less_notify"
+        android:id="@+id/less_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
