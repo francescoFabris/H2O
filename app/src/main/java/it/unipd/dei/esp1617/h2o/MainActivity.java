@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 public class MainActivity extends AppCompatActivity {
     private Button bu;
     private TextView tv1,tv2,tv3,tv4;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static int drunkGlasses;
     private boolean toastNegSent;
     private ImageView imageMan;
+    private static final String SHOWCASE_ID = "faminus show";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         imageMan = (ImageView) findViewById(R.id.donut);
 
+        presentShowcaseView(1000); // one second delay
     }
 
 
@@ -100,8 +104,9 @@ public class MainActivity extends AppCompatActivity {
         String toShow = Integer.toString(drunkMl) + " ml";
         tv2.setText(toShow);
         tv4.setText((drunkGlasses>5)?R.string.c2:R.string.c1);
+
         if(0 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man1);
+    //        imageMan.setImageResource(R.drawable.man1);
         }
         if(1 == drunkGlasses) {
             imageMan.setImageResource(R.drawable.man2);
@@ -112,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
         if(3 == drunkGlasses) {
             imageMan.setImageResource(R.drawable.man4);
         }
- //       if(4 == drunkGlasses) {
-  //          imageMan.setImageResource(R.drawable.man5);  // BUG (non so perchè)
-   //     }
+        if(4 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man5);
+        }
         if(5 == drunkGlasses) {
             imageMan.setImageResource(R.drawable.man6);
         }
@@ -131,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
             imageMan.setImageResource(R.drawable.man10);
         }
         if(10 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man11);
+    //        imageMan.setImageResource(R.drawable.man11);
         }
-
+        if(11 <= drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man12);
+        }
     }
 
 
@@ -145,5 +152,15 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setToastNegNotSent(){
         toastNegSent=false;
+    }
+
+    private void presentShowcaseView(int withDelay) {
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(faminus)
+                .setContentText("Tap here to reduce the count of 200ml (-1 Glass)")
+                .setDismissOnTouch(true)
+                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
+                .show();
     }
 }
