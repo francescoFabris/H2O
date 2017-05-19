@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private Button bu;
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton faplus, faminus;
     private static int drunkGlasses;
     private boolean toastNegSent;
+    private ImageView imageMan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        imageMan = (ImageView) findViewById(R.id.donut);
 
         faplus = (FloatingActionButton)findViewById(R.id.plus_button);
         faminus = (FloatingActionButton)findViewById(R.id.minus_button);
@@ -90,8 +95,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void changeViewsText(){
-        tv2.setText(Integer.toString(drunkGlasses));
+        int drunkMl = drunkGlasses*200;
+        tv2.setText(Integer.toString(drunkMl) + " ml");
         tv4.setText((drunkGlasses>5)?R.string.c2:R.string.c1);
+
+        if(0 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man1);
+        }
+        if(1 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man2);
+        }
+        if(2 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man3);
+        }
+        if(3 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man4);
+        }
+        if(4 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man5);
+        }
+        if(5 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man6);
+        }
+        if(6 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man7);
+        }
+        if(7 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man8);
+        }
+        if(8 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man9);
+        }
+        if(9 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man10);
+        }
+        if(10 == drunkGlasses) {
+            imageMan.setImageResource(R.drawable.man11);
+        }
+//        if(10 < drunkGlasses) {
+//            imageMan.setImageResource(R.drawable.man12);  // non capisco dove sia il problema
+//        }
     }
 
 
