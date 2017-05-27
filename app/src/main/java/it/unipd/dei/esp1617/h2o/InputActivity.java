@@ -343,15 +343,15 @@ public class InputActivity extends AppCompatActivity
         boolean male = preferences.getBoolean("male_value",false);  //male = true, female = false;
         boolean sport = preferences.getBoolean("sport_value",false);
         int quantity=0; //quantità determinata in ml
-        if(age<=2) quantity=500;
-        else if(age<5) quantity=900;
-        else if(age<10) quantity=1100;
-        else if(age<12) quantity=1300;
+        if(age<=2) quantity=600;
+        else if(age<5) quantity=800;
+        else if(age<10) quantity=1200;
+        else if(age<12) quantity=1400;
         else{
             if(male){
-                quantity=1500;
+                quantity=1600;
                 if(age>16)
-                    quantity+=300;
+                    quantity+=200;
                 if(sport)
                     quantity+=400;
                 if(weight>80)
@@ -360,7 +360,7 @@ public class InputActivity extends AppCompatActivity
             else{
                 quantity=1400;
                 if(age>16)
-                    quantity+=300;
+                    quantity+=200;
                 if(sport)
                     quantity+=400;
                 if(weight>70)

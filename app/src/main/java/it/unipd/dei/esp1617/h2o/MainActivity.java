@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         drunkGlasses=preferences.getInt("drunk_glasses",0);
         quantity=preferences.getInt("quantity",0);
         Log.d(TAG,"quantity presa="+quantity);
-        totalGlasses = quantity/150;
+        totalGlasses = quantity/200;
         male=preferences.getBoolean("male",false);
         changeViewsText();
         setToastNegNotSent();
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeViewsText(){
         Log.d(TAG,"changeViewsText called");
-        int drunkMl = drunkGlasses*150;
+        int drunkMl = drunkGlasses*200;
         String toShow = Integer.toString(drunkMl) + " ml / "+quantity+" ml";
         tv2.setText(toShow);
         tv4.setText((drunkGlasses>8)?R.string.c2:R.string.c1);
@@ -146,58 +146,112 @@ public class MainActivity extends AppCompatActivity {
         imageMan = (ImageView) findViewById(R.id.donut);
         //FAI UN IF CHE CONTEMPLI L'IPOTESI DI totalGlasses = 0
         //ALL'INIZIO E'COSI
-        if(0 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man1);
-            Log.d(TAG, "Settato ImageMan1");
-        }
-        else if(1 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man2);
-            Log.d(TAG, "Settato ImageMan2");
-        }
-        else if(2 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man3);
-            Log.d(TAG, "Settato ImageMan3");
-        }
-        else if(3 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man4);
-            Log.d(TAG, "Settato ImageMan4");
-        }
-        else if(4 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man5);
-            Log.d(TAG, "Settato ImageMan5");
-        }
-        else if(5 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man6);
-            Log.d(TAG, "Settato ImageMan6");
-        }
-        else if(6 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man7);
 
-            Log.d(TAG, "Settato ImageMan7");
-        }
-        else if(7 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man8);
-            Log.d(TAG, "Settato ImageMan8");
-        }
-        else if(8 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man9);
+        int donutParameter = drunkGlasses + 11 - totalGlasses;
 
-            Log.d(TAG, "Settato ImageMan9");
-        }
-        else if(9 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man10);
 
-            Log.d(TAG, "Settato ImageMan10");
+        if (male) {
+            if(0 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.man1);
+                Log.d(TAG, "Settato ImageMan1");
+            }
+            else if(1 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.man2);
+                Log.d(TAG, "Settato ImageMan2");
+            }
+            else if(2 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.man3);
+                Log.d(TAG, "Settato ImageMan3");
+            }
+            else if(3 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man4);
+                Log.d(TAG, "Settato ImageMan4");
+            }
+            else if(4 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man5);
+                Log.d(TAG, "Settato ImageMan5");
+            }
+            else if(5 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man6);
+                Log.d(TAG, "Settato ImageMan6");
+            }
+            else if(6 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man7);
+                Log.d(TAG, "Settato ImageMan7");
+            }
+            else if(7 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man8);
+                Log.d(TAG, "Settato ImageMan8");
+            }
+            else if(8 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man9);
+                Log.d(TAG, "Settato ImageMan9");
+            }
+            else if(9 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man10);
+                Log.d(TAG, "Settato ImageMan10");
+            }
+            else if(10 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man11);
+                Log.d(TAG, "Settato ImageMan11");
+            }
+            else if(11 == donutParameter) {
+                imageMan.setImageResource(R.drawable.man12);
+                Log.d(TAG, "Settato ImageMan12");
+            }
         }
-        else if(10 == drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man11);
+        else
+        {
+            if(0 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.woman1);
+                Log.d(TAG, "Settato ImageWoman1");
+            }
+            if(1 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.woman2);
+                Log.d(TAG, "Settato ImageWoman2");
+            }
+            if(2 == drunkGlasses) {
+                imageMan.setImageResource(R.drawable.woman3);
+                Log.d(TAG, "Settato ImageWoman3");
+            }
+            if(3 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman4);
+                Log.d(TAG, "Settato ImageWoman4");
+            }
+            if(4 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman5);
+                Log.d(TAG, "Settato ImageWoman5");
+            }
+            if(5 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman6);
+                Log.d(TAG, "Settato ImageWoman6");
+            }
+            if(6 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman7);
+                Log.d(TAG, "Settato ImageWoman7");
+            }
+            if(7 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman8);
+                Log.d(TAG, "Settato ImageWoman8");
+            }
+            if(8 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman9);
+                Log.d(TAG, "Settato ImageWoman9");
+            }
+            if(9 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman10);
+                Log.d(TAG, "Settato ImageWoman10");
+            }
+            if(10 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman11);
+                Log.d(TAG, "Settato ImageWoman11");
+            }
+            if(11 == donutParameter) {
+                imageMan.setImageResource(R.drawable.woman12);
+                Log.d(TAG, "Settato ImageWoman12");
+            }
+        }
 
-            Log.d(TAG, "Settato ImageMan11");
-        }
-        else if(11 <= drunkGlasses) {
-            imageMan.setImageResource(R.drawable.man12);
-            Log.d(TAG, "Settato ImageMan12");
-        }
     }
 
     private int getGlasses(Intent intent){
