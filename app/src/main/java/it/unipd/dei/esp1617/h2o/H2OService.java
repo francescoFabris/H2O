@@ -42,7 +42,8 @@ public class H2OService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        if(intent.getBooleanExtra(RESCHEDULE, true)){
+        Log.d(TAG,"onStartCommand called");
+        if(intent.getBooleanExtra(RESCHEDULE, false)){
             scheduleNotifications();
             Log.d(TAG,"notifiche schedulate");
         }
@@ -77,10 +78,10 @@ public class H2OService extends Service{
 
 
     private void scheduleNotifications(){
-        Log.d(TAG, "scheduleNotifications called", new Exception());
+        Log.d(TAG, "scheduleNotifications called");
         getNotArray();
         for(int i=0; i<24; i++){
-            if(notArray[i]!=null&&notArray[i].getNumberOfGlasses()!=0){
+            if(notArray[i]!=null&&notArray[i].getNumberOfGlasses()>0){
                 Intent intent = new Intent(this, H2OReceiver.class);
                 intent.putExtra(ID, notArray[i].getId());
                 intent.putExtra(H2OReceiver.NOTIFICATION,true);
@@ -95,4 +96,10 @@ public class H2OService extends Service{
             }
         }
     }
+    /*
+    * SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        drunkGlasses=preferences.getInt("drunk_glasses",0);
+        totalGlasses=preferences.getInt("quantity",0)/150;
+        male=preferences.getBoolean("male",false);
+        */
 }

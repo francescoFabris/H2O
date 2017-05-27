@@ -16,10 +16,15 @@
         android:text="@string/options"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="96dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintRight_toLeftOf="@+id/zero_button"
+        android:layout_marginRight="8dp"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -40,67 +45,79 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.501"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView" />
+        app:layout_constraintBottom_toTopOf="@+id/imageViewGlass" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/plus_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="42dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="333dp"
         android:clickable="true"
         app:backgroundTint="@color/colorButton"
         app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.072"
-        app:srcCompat="@drawable/plus_one" />
+        app:srcCompat="@drawable/plus_one"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.045" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/minus_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="333dp"
         android:clickable="true"
         app:backgroundTint="@color/colorButton"
         app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/minus_one" />
+        app:srcCompat="@drawable/minus_one"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.045" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="140dp"
-        android:layout_height="142dp"
+        android:id="@+id/imageViewGlass"
+        android:layout_width="129dp"
+        android:layout_height="128dp"
         app:srcCompat="@drawable/glass"
         app:layout_constraintRight_toLeftOf="@+id/plus_button"
         android:layout_marginRight="8dp"
         app:layout_constraintLeft_toRightOf="@+id/minus_button"
         android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/apri_second"
-        tools:layout_editor_absoluteY="297dp" />
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="89dp"/>
 
     <ImageView
         android:id="@+id/donut"
-        android:layout_width="301dp"
-        android:layout_height="222dp"
-        android:layout_marginBottom="0dp"
+        android:layout_width="235dp"
+        android:layout_height="209dp"
+        android:layout_marginBottom="-26dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/zero_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zero"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="90dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/man1" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="1.0"
+        />
 
 </android.support.constraint.ConstraintLayout>

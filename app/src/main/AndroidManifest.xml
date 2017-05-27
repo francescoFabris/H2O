@@ -3,6 +3,7 @@
           package="it.unipd.dei.esp1617.h2o">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="androd.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
@@ -19,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".InputActivity">
+        <activity android:name=".InputActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <service
