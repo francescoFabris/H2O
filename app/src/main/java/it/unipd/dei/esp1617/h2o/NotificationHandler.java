@@ -11,13 +11,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.NotificationCompat;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by boemd on 19/05/2017.
  */
 
-public class NotificationHandler {
+    class NotificationHandler {
     private NotificationTemplate nt;
     private NotificationManager nMan;
     private int drunkGlasses;
@@ -25,9 +23,7 @@ public class NotificationHandler {
     private Context context;
     SharedPreferences preferences;
     public static final String KEY_TEXT_REPLY = "key_text_reply";
-    public static final int BIG_TEXT_NOTIFICATION_KEY = 0;
-    public static final String NUM = "num";
-    String name;
+    private String name;
 
     public NotificationHandler(Context context, NotificationTemplate nt){
         this.context=context;

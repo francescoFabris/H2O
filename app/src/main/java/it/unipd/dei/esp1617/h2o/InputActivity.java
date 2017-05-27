@@ -1,15 +1,11 @@
 package it.unipd.dei.esp1617.h2o;
 
-//import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.IntDef;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,10 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
-import java.lang.Number;
-import java.util.Date;
-
-import static java.lang.Integer.valueOf;
 
 /**
  * Created by boemd on 04/04/2017.
@@ -43,11 +36,13 @@ public class InputActivity extends AppCompatActivity
     private boolean toastNameSent,toastWeightSent;
     private boolean modificationsHaveOccurred = false;
     private NotificationTemplate[] notArray = new NotificationTemplate[24];
-
     private int hourS = -1, minS = -1, hourW = -1, minW = -1;
-    static final int TIME_DIALOG_ID = 0;
-
     private static final String TAG = "InputActivity";
+
+    /**
+     * vengono inizializzati i vari widget e settati i vari listener
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,19 +58,17 @@ public class InputActivity extends AppCompatActivity
         boolean sport = preferences.getBoolean("sport_value",false);
         boolean male = preferences.getBoolean("male_value",false);  //male = true, female = false;
         String name = preferences.getString("name_value", "User");
-        int quantity = preferences.getInt("quantity", 0);
         hourW = preferences.getInt("hour_w", 7);
         minW = preferences.getInt("min_w", 0);
         hourS = preferences.getInt("hour_s", 23);
         minS = preferences.getInt("min_s", 0);
 
-        String wake = preferences.getString("time_wake", hourW+" : "+minW);
-        String sleep = preferences.getString("time_sleep", hourS+" : "+minS);
+        String wake = preferences.getString("time_wake", (hourW<10?"0":"")+hourW+" : "+(minW<10?"0":"")+minW);
+        String sleep = preferences.getString("time_sleep", (hourS<10?"0":"")+hourS+" : "+(minS<10?"0":"")+minS);
 
         //aggancio widget con IDs
         final EditText spaceName=(EditText) findViewById(R.id.name_space);
         EditText spaceWeight=(EditText) findViewById(R.id.weight);
-        //EditText spaceSport=(EditText) findViewById(R.id.sport_time);
         Spinner spinnerSex=(Spinner) findViewById(R.id.sex_spinner);
         final Spinner spinnerAge=(Spinner) findViewById(R.id.age_spinner);
         TextView spaceSleep=(TextView) findViewById(R.id.sleep_time);
@@ -86,15 +79,28 @@ public class InputActivity extends AppCompatActivity
         checkNot.setChecked(lessnot);
         checkSport.setChecked(sport);
 
+        checkNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                modificationsHaveOccurred=true;
+                Log.d(TAG, "LessNot changed");
+            }
+        });
+        checkSport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                modificationsHaveOccurred=true;
+                Log.d(TAG, "Sport changed");
+            }
+        });
+
         //EditText
         if(name.equals(""))
         {
-            name="Al Bano Carrisi";
+            name="User";
         }
         spaceName.setText(name);
         spaceWeight.setText(Integer.toString(weight)); //Non è stato messo l'Integer puro perché causava un bug nell'apertura
-        //spaceSleep.setText();
-        //spaceSleep.setText();
 
         spaceName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,9 +123,6 @@ public class InputActivity extends AppCompatActivity
             }
         });
 
-        if(weight==0)
-            weight=50;
-
         spaceWeight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -135,6 +138,7 @@ public class InputActivity extends AppCompatActivity
             public void afterTextChanged(Editable s) {
 
                 modificationsHaveOccurred=true;
+                Log.d(TAG, "Weight changed");
                 if(!isToastWeightSent()&&Double.parseDouble(0+s.toString())>199){       //parseInt da errore se s è vuota!! E' necessario aggiungere lo 0 iniziale
                     Toast.makeText(InputActivity.this, R.string.toast_weight,Toast.LENGTH_SHORT).show();
                     setToastWeightSent();
@@ -148,33 +152,12 @@ public class InputActivity extends AppCompatActivity
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSex.setAdapter(sex_adapter);
         spinnerSex.setSelection(male?1:0);
-        spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                modificationsHaveOccurred=true;
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         ArrayAdapter<CharSequence> years_adapter = ArrayAdapter.createFromResource(this, R.array.years_array, android.R.layout.simple_spinner_item);
         sex_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(years_adapter);
         spinnerAge.setSelection(age);
-        spinnerAge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                modificationsHaveOccurred=true;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         spaceSleep.setText(sleep);
         spaceWake.setText(wake);
@@ -204,7 +187,7 @@ public class InputActivity extends AppCompatActivity
 
     }
 
-    public void showTimeDialogS(int hour, int min) {
+    private void showTimeDialogS(int hour, int min) {
         (new TimePickerDialog(InputActivity.this, timeSetListenerS, hour, min, true)).show();
     }
 
@@ -215,7 +198,9 @@ public class InputActivity extends AppCompatActivity
             hourS = hourOfDay;
             minS = minute;
             TextView spaceSleep = (TextView) findViewById(R.id.sleep_time);
-            spaceSleep.setText(new StringBuilder().append(hourS).append(" : ").append(minS));
+            spaceSleep.setText(new StringBuilder().append((hourS<10?"0":"")).append(hourS).append(" : ").append((minS<10?"0":"")).append(minS));
+            modificationsHaveOccurred=true;
+            Log.d(TAG, "Sleep changed");
         }
     };
 
@@ -230,14 +215,19 @@ public class InputActivity extends AppCompatActivity
             hourW = hourOfDay;
             minW = minute;
             TextView spaceWake = (TextView) findViewById(R.id.wake_time);
-            spaceWake.setText(new StringBuilder().append(hourW).append(" : ").append(minW));
+            spaceWake.setText(new StringBuilder().append((hourW<10?"0":"")).append(hourW).append(" : ").append((minW<10?"0":"")).append(minW));
+            modificationsHaveOccurred=true;
+            Log.d(TAG, "Wake changed");
         }
     };
 
-    //@SuppressLint("CommitPrefsEdit")
+    /**
+     * vengono salvati (o sovrascritti) nelle defaultSharedPreferences i dati di input.
+     * Se sono state fatte delle modifiche ai dati, allora la vengono chiamati i metodi di stima della quantità d'acqua da consumare
+     * e di conseguenza l'array di NotificationsTemplate viene ricomputato.
+     */
     @Override
-    protected void onPause()
-    {
+    protected void onPause(){
         Log.d(TAG,"onPause called");
         super.onPause();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -261,17 +251,9 @@ public class InputActivity extends AppCompatActivity
         TextView spaceWake=(TextView) findViewById(R.id.wake_time);
         TextView spaceSleep=(TextView) findViewById(R.id.sleep_time);
         Log.d(TAG,name+" uomo=" +male+" anni="+age+" peso="+weight+" sport="+sport);
-        /*
-        int hourW = 0+Integer.parseInt(((TextView)findViewById(R.id.wake_hour)).getText().toString());
-        int minW = 0+Integer.parseInt(((TextView)findViewById(R.id.wake_min)).getText().toString());
-        int hourS = 0+Integer.parseInt(((TextView)findViewById(R.id.sleep_hour)).getText().toString());
-        int minS = 0+Integer.parseInt(((TextView)findViewById(R.id.sleep_min)).getText().toString());
-        */
-        int quantity = getQuantity();
-        fillNotArray(quantity, lessnot, hourW, minW,hourS, minS, male,age);
-
-        storeNotArray();
-        //INTENT AL SERVICE
+        if(preferences.getInt("age_value",0)!=age ||preferences.getBoolean("male_value",false)!=male){
+            modificationsHaveOccurred=true;
+        }
 
         //salvataggio dello stato persistente
         editor.putInt("age_value",age);
@@ -284,34 +266,38 @@ public class InputActivity extends AppCompatActivity
         editor.putInt("min_w",minW);
         editor.putInt("hour_s",hourS);
         editor.putInt("min_s",minS);
-        editor.putInt("quantity",getQuantity());
         editor.putString("time_wake", spaceWake.getText().toString());
         editor.putString("time_sleep", spaceSleep.getText().toString());
 
-        /*
         if(modificationsHaveOccurred){
-            editor.putInt("quantity",getQuantity());
-            storeNotArray();
+            Log.d(TAG, "Modifications have occurred");
+            int quantity = getQuantity(age, weight, male, sport);
+            editor.putInt("quantity",quantity);
+            fillNotArray(quantity, lessnot, hourW, minW,hourS, minS, male,age);
 
+            //INTENT AL SERVICE
             Intent i = new Intent(getApplicationContext(),H2OService.class);
             i.putExtra(H2OService.RESCHEDULE, true);
+            Log.d(TAG,"Reschedule intent created in Activity");
             startService(i);
         }
-        */
+        else{
+            Log.d(TAG, "Modifications have NOT occurred");
+        }
 
         //salvataggio in mutua esclusione
         editor.commit();
-
-        Intent i = new Intent(getApplicationContext(),H2OService.class);
-        i.putExtra(H2OService.RESCHEDULE, true);
-        Log.d(TAG,"Reschedule intent created in Activity");
-        startService(i);
+        Log.d(TAG, "Salvataggio in mutua esclusione");
     }
 
+    /**
+     * i metodi "not-setter" del controllo dei toast vengono chiamati in onResume() così da poter venire chiamati
+     * ogni volta che l'InputActivity viene riaperta
+     */
     @Override
     protected void onResume(){
-        super.onResume();           //i metodi "not-setter" del controllo dei toast vengono chiamati in onResume() così da poter venire chiamati
-        setToastNameNotSent();      //ogni volta che l'InputActivity viene riaperta
+        super.onResume();
+        setToastNameNotSent();
         setToastWeightNotSent();
     }
 
@@ -335,14 +321,16 @@ public class InputActivity extends AppCompatActivity
         toastWeightSent=false;
     }
 
-    //algoritmo che determina la quantità d'acqua da consumare
-    private int getQuantity(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int age = preferences.getInt("age_value",0);
-        int weight = preferences.getInt("weight_value",50);
-        boolean male = preferences.getBoolean("male_value",false);  //male = true, female = false;
-        boolean sport = preferences.getBoolean("sport_value",false);
-        int quantity=0; //quantità determinata in ml
+    /**
+     * algoritmo che determina la quantità d'acqua da consumare giornalmente
+     * @param age
+     * @param weight
+     * @param male
+     * @param sport
+     * @return quantità d'acqua da consumare giornalmente
+     */
+    private int getQuantity(int age,int weight,boolean male,boolean sport){
+        int quantity; //quantità determinata in ml
         if(age<=2) quantity=600;
         else if(age<5) quantity=800;
         else if(age<10) quantity=1200;
@@ -367,14 +355,21 @@ public class InputActivity extends AppCompatActivity
                     quantity+=200;
             }
         }
-
-        Log.d(TAG, "settata Quantity = "+quantity);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("quantity",quantity);
-        editor.commit();
         return quantity;
     }
 
+    /**
+     * riempimento delle 24 notifiche giornaliere
+     * se non è necessario che la notifica i-esima venga schedulata, allora notArray[i] verrà posto a null
+     * @param quantity
+     * @param lessnot
+     * @param wakeH
+     * @param wakeM
+     * @param sleepH
+     * @param sleepM
+     * @param male
+     * @param age
+     */
     private void fillNotArray(int quantity, boolean lessnot, int wakeH, int wakeM, int sleepH, int sleepM, boolean male,int age){
         int hour = sleepH- wakeH;//se si va a letto dopo mezzanotte, hour diventa negativo. Risoluzione riga successiva
         hour = (hour<0)?(24+hour):(hour);
@@ -611,15 +606,14 @@ public class InputActivity extends AppCompatActivity
             }
 
         }
-
+        storeNotArray();
     }
 
-    //inizializzo l'array con vecchio input
-    private void initializeNotArray(){
 
-    }
-
-    //sovrascrivo file col nuovo input
+    /**
+     * sovrascrivo il file con l'informazione contenuta nell'array notArray appena riempito
+     * questo metodo viene chiamato all'interno del metodo fillNotArray()
+     */
     private void storeNotArray(){
         try{
             FileOutputStream fos = (InputActivity.this).openFileOutput("notificationsTemplateContainer.obj", Context.MODE_PRIVATE);

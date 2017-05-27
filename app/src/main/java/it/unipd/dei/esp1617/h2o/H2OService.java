@@ -1,24 +1,17 @@
 package it.unipd.dei.esp1617.h2o;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.IBinder;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Calendar;
-
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 public class H2OService extends Service{
@@ -29,7 +22,7 @@ public class H2OService extends Service{
     private NotificationTemplate[] notArray = new NotificationTemplate[24];
 
 
-    AlarmManager alMan; // alMan è un AlarmManager // alBan è un Cantante
+    private AlarmManager alMan; // alMan è un AlarmManager // alBan è un Cantante
 
     public H2OService() {
     }
@@ -39,11 +32,18 @@ public class H2OService extends Service{
         Log.d(TAG,"service creato");
     }
 
+    /**
+     * se è necessario schedulare le 24 notifiche, il service chiama il metodo scheduleNotifications();
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return Service.START_STICKY se il Service viene terminato, lo si deve immediatamente ricreare
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.d(TAG,"onStartCommand called");
-        if(intent.getBooleanExtra(RESCHEDULE, false)){
+        if(intent==null || intent.getBooleanExtra(RESCHEDULE, false)){//GENERA ERRORE  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             scheduleNotifications();
             Log.d(TAG,"notifiche schedulate");
         }
@@ -55,6 +55,9 @@ public class H2OService extends Service{
         return null;
     }
 
+    /**
+     * notArray viene riempito in base a ciò che viene letto dal file "notificationsTemplateContainer.obj"
+     */
     private void getNotArray(){
         try{
             FileInputStream fis = this.openFileInput("notificationsTemplateContainer.obj");
@@ -76,7 +79,15 @@ public class H2OService extends Service{
         }
     }
 
-
+    /**
+     * settati al più 24 alarms contenenti un PendingIntent contenente a sua volta le informazioni necessarie al Broadcast Receiver
+     * per mostrare la notifica
+     * si vuole poi che la stessa notifica venga ripetuta ogni giorno
+     *
+     * Il request code di ogni PendingIntent è l'ora in cui la notifica deve venire mostrat
+     * così in caso di rescheduling verranno considerati solamente i nuovi PendingIntent
+     * evitando così inconvenevoli sovrapposizioni
+     */
     private void scheduleNotifications(){
         Log.d(TAG, "scheduleNotifications called");
         getNotArray();
@@ -96,10 +107,4 @@ public class H2OService extends Service{
             }
         }
     }
-    /*
-    * SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        drunkGlasses=preferences.getInt("drunk_glasses",0);
-        totalGlasses=preferences.getInt("quantity",0)/150;
-        male=preferences.getBoolean("male",false);
-        */
 }

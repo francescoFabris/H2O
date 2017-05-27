@@ -104,7 +104,7 @@
     </string-array>
 
 <string-array name="sex_array">
-    <item>♀</item>
-    <item>♂</item>
+    <item>F</item>
+    <item>M</item>
 </string-array>
 </resources>

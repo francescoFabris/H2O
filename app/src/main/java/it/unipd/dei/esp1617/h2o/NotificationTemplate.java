@@ -12,6 +12,12 @@ class NotificationTemplate implements Serializable{ //Serializable perché gli o
     private Calendar when;
     private int numberOfGlasses;
 
+    /**
+     * ogni oggetto di questa classe contiene al suo interno le informazioni necessarie alla creazione di una notifica
+     * @param id
+     * @param when
+     * @param numberOfGlasses
+     */
     NotificationTemplate(int id, Calendar when, int numberOfGlasses){
         this.id=id;
         this.when=when;

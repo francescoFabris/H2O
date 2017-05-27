@@ -16,9 +16,7 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private Button bu, bu2;
-    private TextView tv1,tv2,tv3,tv4;
-    private FloatingActionButton faplus, faminus;
+    private TextView tv2,tv4;
     private static int drunkGlasses;
     private static int quantity;
     private static int totalGlasses;
@@ -26,18 +24,26 @@ public class MainActivity extends AppCompatActivity {
     private boolean male;
     private ImageView imageMan;
 
+    /**
+     * vengono inizializzati i vari widget e settati i vari listener
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate called");
         setContentView(R.layout.activity_main);
 
+        Button bu;
+        FloatingActionButton faplus, faminus;
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         drunkGlasses=preferences.getInt("drunk_glasses",0);
         quantity=preferences.getInt("quantity",0);
         Log.d(TAG,"quantity presa="+quantity);
         totalGlasses = quantity/150;
-        male=preferences.getBoolean("male",false);
+        male=preferences.getBoolean("male_value",false);
+        Log.d(TAG, male?"male":"female");
         int gl = getGlasses(getIntent());
         if(gl!=0){
             drunkGlasses += gl;
@@ -86,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * è necessario solamente salvare nelle DefaultSharedPreferences il numero di bicchieri bevuti
+     */
     @Override
     protected void onPause(){
         super.onPause();
@@ -93,9 +102,14 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("drunk_glasses",drunkGlasses);
-        editor.apply();
+        editor.commit();
     }
 
+    /**
+     * vengono ripristinati dalle DefaultSharedPreferences il numero di bicchieri bevuti
+     * e ad essi vengono sommati quelli aggiunti tramite notifica
+     * in fine la grafica viene aggiornata in base ai nuovi dati
+     */
     @Override
     protected void onResume(){
         super.onResume();
@@ -105,12 +119,17 @@ public class MainActivity extends AppCompatActivity {
         quantity=preferences.getInt("quantity",0);
         Log.d(TAG,"quantity presa="+quantity);
         totalGlasses = quantity/200;
-        male=preferences.getBoolean("male",false);
+        male=preferences.getBoolean("male_value",false);
+        Log.d(TAG, "sex="+(male?"male":"female"));
+        int gl = getGlasses(getIntent());
+        if(gl!=0){
+            drunkGlasses += gl;
+        }
         changeViewsText();
         setToastNegNotSent();
     }
 
-    public void incrementGlasses(){
+    private void incrementGlasses(){
         drunkGlasses++;
         changeViewsText();
         Log.d(TAG,"drunkGlasses="+drunkGlasses);
@@ -131,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * aggiornamento della grafica
+     */
     private void changeViewsText(){
         Log.d(TAG,"changeViewsText called");
         int drunkMl = drunkGlasses*200;
@@ -141,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * modifica dell'ImageDonut
+     */
     private void changeImageDonut(){
         Log.d(TAG,"changeImageDonut called");
         imageMan = (ImageView) findViewById(R.id.donut);
@@ -206,47 +231,47 @@ public class MainActivity extends AppCompatActivity {
                 imageMan.setImageResource(R.drawable.woman1);
                 Log.d(TAG, "Settato ImageWoman1");
             }
-            if(1 == drunkGlasses) {
+            else if(1 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman2);
                 Log.d(TAG, "Settato ImageWoman2");
             }
-            if(2 == drunkGlasses) {
+            else if(2 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman3);
                 Log.d(TAG, "Settato ImageWoman3");
             }
-            if(3 == donutParameter) {
+            else if(3 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman4);
                 Log.d(TAG, "Settato ImageWoman4");
             }
-            if(4 == donutParameter) {
+            else if(4 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman5);
                 Log.d(TAG, "Settato ImageWoman5");
             }
-            if(5 == donutParameter) {
+            else if(5 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman6);
                 Log.d(TAG, "Settato ImageWoman6");
             }
-            if(6 == donutParameter) {
+            else if(6 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman7);
                 Log.d(TAG, "Settato ImageWoman7");
             }
-            if(7 == donutParameter) {
+            else if(7 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman8);
                 Log.d(TAG, "Settato ImageWoman8");
             }
-            if(8 == donutParameter) {
+            else if(8 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman9);
                 Log.d(TAG, "Settato ImageWoman9");
             }
-            if(9 == donutParameter) {
+            else if(9 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman10);
                 Log.d(TAG, "Settato ImageWoman10");
             }
-            if(10 == donutParameter) {
+            else if(10 == donutParameter) {
                 imageMan.setImageResource(R.drawable.woman11);
                 Log.d(TAG, "Settato ImageWoman11");
             }
-            if(11 == donutParameter) {
+            else if(11 <= donutParameter) {
                 imageMan.setImageResource(R.drawable.woman12);
                 Log.d(TAG, "Settato ImageWoman12");
             }
@@ -254,9 +279,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * viene estrapolato dall'extra dell'intent il numero di bicchieri
+     * segnalato dall'utente dalla notifica
+     * @param intent
+     * @return numero di bicchieri segnalato dall'utente
+     */
     private int getGlasses(Intent intent){
         Log.d(TAG,"getGlasses called");
-        int ret = 0;
+        Integer ret = 0;
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         try{
             if (remoteInput != null) {
@@ -264,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 NotificationHandler nh = new NotificationHandler(getApplicationContext(), null);
                 nh.dismissDirectReplayNotification(id);
                 ret = Integer.parseInt(remoteInput.getCharSequence(NotificationHandler.KEY_TEXT_REPLY).toString());
+                if(ret==null)ret=0;
                 ret = (ret>0)?ret:0;
             }
         }
@@ -274,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    //metodi di controllo della ripetizione dei toast
     private boolean isToastNegSent(){
         return toastNegSent;
     }

@@ -1,31 +1,28 @@
 package it.unipd.dei.esp1617.h2o;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class H2OReceiver extends BroadcastReceiver {
 
     private NotificationTemplate[] notArray = new NotificationTemplate[24];
     private static final String TAG = "H2OReceiver";
     public static final String NOTIFICATION = "Notification";
-    public static final String MIDNIGHT = "Midnight";
     private Context context;
+
+    /**
+     * in base al contenuto dell'intent ricevuto, viene deciso se:
+     *      -ri-schedulare tutte le notifiche
+     *      -mostrare un notifica tramite l'azione di un NotificationHandler
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -52,6 +49,9 @@ public class H2OReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * notArray viene riempito in base a ciò che viene letto dal file "notificationsTemplateContainer.obj"
+     */
     private void getNotArray(){
         try{
             FileInputStream fis = context.getApplicationContext().openFileInput("notificationsTemplateContainer.obj");
