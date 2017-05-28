@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 imageMan.setImageResource(R.drawable.man11);
                 Log.d(TAG, "Settato ImageMan11");
             }
-            else if(11 == donutParameter) {
+            else if(11 <= donutParameter) {
                 imageMan.setImageResource(R.drawable.man12);
                 Log.d(TAG, "Settato ImageMan12");
             }
