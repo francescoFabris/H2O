@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean toastNegSent;
     private boolean male;
     private ImageView imageMan;
-
+    private double donutParameter;
     /**
      * vengono inizializzati i vari widget e settati i vari listener
      * @param savedInstanceState
@@ -172,8 +172,6 @@ public class MainActivity extends AppCompatActivity {
         //FAI UN IF CHE CONTEMPLI L'IPOTESI DI totalGlasses = 0
         //ALL'INIZIO E'COSI
 
-        int donutParameter = drunkGlasses + 11 - totalGlasses;
-
 
         if (male) {
             if(0 == drunkGlasses) {
@@ -184,43 +182,43 @@ public class MainActivity extends AppCompatActivity {
                 imageMan.setImageResource(R.drawable.man2);
                 Log.d(TAG, "Settato ImageMan2");
             }
-            else if(2 == drunkGlasses) {
+            else if(Math.ceil(2*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man3);
                 Log.d(TAG, "Settato ImageMan3");
             }
-            else if(3 == donutParameter) {
+            else if(Math.ceil(3*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man4);
                 Log.d(TAG, "Settato ImageMan4");
             }
-            else if(4 == donutParameter) {
+            else if(Math.ceil(4*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man5);
                 Log.d(TAG, "Settato ImageMan5");
             }
-            else if(5 == donutParameter) {
+            else if(Math.ceil(5*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man6);
                 Log.d(TAG, "Settato ImageMan6");
             }
-            else if(6 == donutParameter) {
+            else if(Math.ceil(6*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man7);
                 Log.d(TAG, "Settato ImageMan7");
             }
-            else if(7 == donutParameter) {
+            else if(Math.ceil(7*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man8);
                 Log.d(TAG, "Settato ImageMan8");
             }
-            else if(8 == donutParameter) {
+            else if(Math.ceil(8*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man9);
                 Log.d(TAG, "Settato ImageMan9");
             }
-            else if(9 == donutParameter) {
+            else if(Math.ceil(9*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man10);
                 Log.d(TAG, "Settato ImageMan10");
             }
-            else if(10 == donutParameter) {
+            else if(Math.ceil(10*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man11);
                 Log.d(TAG, "Settato ImageMan11");
             }
-            else if(11 <= donutParameter) {
+            else if(totalGlasses <= drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man12);
                 Log.d(TAG, "Settato ImageMan12");
             }
@@ -235,43 +233,43 @@ public class MainActivity extends AppCompatActivity {
                 imageMan.setImageResource(R.drawable.woman2);
                 Log.d(TAG, "Settato ImageWoman2");
             }
-            else if(2 == drunkGlasses) {
+            else if((Math.ceil(2*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman3);
                 Log.d(TAG, "Settato ImageWoman3");
             }
-            else if(3 == donutParameter) {
+            else if((Math.ceil(3*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman4);
                 Log.d(TAG, "Settato ImageWoman4");
             }
-            else if(4 == donutParameter) {
+            else if((Math.ceil(4*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman5);
                 Log.d(TAG, "Settato ImageWoman5");
             }
-            else if(5 == donutParameter) {
+            else if((Math.ceil(5*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman6);
                 Log.d(TAG, "Settato ImageWoman6");
             }
-            else if(6 == donutParameter) {
+            else if((Math.ceil(6*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman7);
                 Log.d(TAG, "Settato ImageWoman7");
             }
-            else if(7 == donutParameter) {
+            else if((Math.ceil(7*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman8);
                 Log.d(TAG, "Settato ImageWoman8");
             }
-            else if(8 == donutParameter) {
+            else if((Math.ceil(8*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman9);
                 Log.d(TAG, "Settato ImageWoman9");
             }
-            else if(9 == donutParameter) {
+            else if((Math.ceil(9*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman10);
                 Log.d(TAG, "Settato ImageWoman10");
             }
-            else if(10 == donutParameter) {
+            else if((Math.ceil(10*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman11);
                 Log.d(TAG, "Settato ImageWoman11");
             }
-            else if(11 <= donutParameter) {
+            else if(totalGlasses <= drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman12);
                 Log.d(TAG, "Settato ImageWoman12");
             }
