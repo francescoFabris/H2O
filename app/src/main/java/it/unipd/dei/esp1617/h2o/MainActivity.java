@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -23,7 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean toastNegSent;
     private boolean male;
     private ImageView imageMan;
-    private double donutParameter;
+    private int ShowcaseDelay = 1000;
+    private static final String SHOWCASE_ID = "01";
+    private FloatingActionButton faplus;
+    private FloatingActionButton faminus;
+    private Button option;
+    private Button setZero;
+
     /**
      * vengono inizializzati i vari widget e settati i vari listener
      * @param savedInstanceState
@@ -33,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate called");
         setContentView(R.layout.activity_main);
-
-        Button bu;
-        FloatingActionButton faplus, faminus;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         drunkGlasses=preferences.getInt("drunk_glasses",0);
@@ -54,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         tv4 = (TextView) findViewById(R.id.textView4);
         changeViewsText();
 
-        bu = (Button) findViewById(R.id.apri_second);
-        bu.setOnClickListener(new View.OnClickListener() {
+        option = (Button) findViewById(R.id.apri_second);
+        option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //start InputActivity
@@ -64,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bu = (Button) findViewById(R.id.zero_button);
-        bu.setOnClickListener(new View.OnClickListener() {
+        setZero = (Button) findViewById(R.id.zero_button);
+        setZero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drunkGlasses=0;
@@ -90,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                 decrementGlasses();
             }
         });
+
+        presentShowcaseSequence();
     }
 
     /**
@@ -314,4 +322,63 @@ public class MainActivity extends AppCompatActivity {
     private void setToastNegNotSent(){
         toastNegSent=false;
     }
+
+    private void presentShowcaseSequence() {
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+
+        sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
+            @Override
+            public void onShow(MaterialShowcaseView itemView, int position) {
+
+            }
+        });
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(faminus)
+                        .setDismissText("GOT IT")
+                        .setContentText("ADD 1 GLASS (200ml)")
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(faplus)
+                        .setDismissText("GOT IT")
+                        .setContentText("REMOVE 1 GLASS (200ml)")
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(setZero)
+                        .setDismissText("GOT IT")
+                        .setContentText("SET DRUNK GLASSES = 0")
+                        .withRectangleShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(option)
+                        .setDismissText("GOT IT")
+                        .setContentText("NOW, FIRST, INSERT YOU DATA")
+                        .withRectangleShape()
+                        .build()
+        );
+
+
+
+        sequence.start();
+
+    }
+
 }
+
+
