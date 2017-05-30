@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         drunkGlasses=preferences.getInt("drunk_glasses",0);
         quantity=preferences.getInt("quantity",0);
-        Log.d(TAG,"quantity presa="+quantity);
+        Log.d(TAG,"Quantity taken="+quantity);
         totalGlasses = quantity/150;
         male=preferences.getBoolean("male_value",false);
-        Log.d(TAG, male?"male":"female");
+        Log.d(TAG, "Sex="+ (male?"male":"female"));
         int gl = getGlasses(getIntent());
         if(gl!=0){
             drunkGlasses += gl;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 drunkGlasses=0;
                 changeViewsText();
-                Log.d(TAG,"Conto azzerato");
+                Log.d(TAG,"Set zero : OK");
             }
         });
 
@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         drunkGlasses=preferences.getInt("drunk_glasses",0);
         quantity=preferences.getInt("quantity",0);
-        Log.d(TAG,"quantity presa="+quantity);
+        Log.d(TAG,"Quantity taken="+quantity);
         totalGlasses = quantity/200;
         male=preferences.getBoolean("male_value",false);
-        Log.d(TAG, "sex="+(male?"male":"female"));
+        Log.d(TAG, "Sex="+(male?"male":"female"));
         int gl = getGlasses(getIntent());
         if(gl!=0){
             drunkGlasses += gl;
@@ -184,102 +184,102 @@ public class MainActivity extends AppCompatActivity {
         if (male) {
             if(0 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man1);
-                Log.d(TAG, "Settato ImageMan1");
+                Log.d(TAG, "Set ImageMan1");
             }
             else if(1 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man2);
-                Log.d(TAG, "Settato ImageMan2");
+                Log.d(TAG, "Set ImageMan2");
             }
             else if(Math.ceil(2*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man3);
-                Log.d(TAG, "Settato ImageMan3");
+                Log.d(TAG, "Set ImageMan3");
             }
             else if(Math.ceil(3*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man4);
-                Log.d(TAG, "Settato ImageMan4");
+                Log.d(TAG, "Set ImageMan4");
             }
             else if(Math.ceil(4*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man5);
-                Log.d(TAG, "Settato ImageMan5");
+                Log.d(TAG, "Set ImageMan5");
             }
             else if(Math.ceil(5*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man6);
-                Log.d(TAG, "Settato ImageMan6");
+                Log.d(TAG, "Set ImageMan6");
             }
             else if(Math.ceil(6*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man7);
-                Log.d(TAG, "Settato ImageMan7");
+                Log.d(TAG, "Set ImageMan7");
             }
             else if(Math.ceil(7*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man8);
-                Log.d(TAG, "Settato ImageMan8");
+                Log.d(TAG, "Set ImageMan8");
             }
             else if(Math.ceil(8*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man9);
-                Log.d(TAG, "Settato ImageMan9");
+                Log.d(TAG, "Set ImageMan9");
             }
             else if(Math.ceil(9*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man10);
-                Log.d(TAG, "Settato ImageMan10");
+                Log.d(TAG, "Set ImageMan10");
             }
             else if(Math.ceil(10*totalGlasses/12) == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man11);
-                Log.d(TAG, "Settato ImageMan11");
+                Log.d(TAG, "Set ImageMan11");
             }
             else if(totalGlasses <= drunkGlasses) {
                 imageMan.setImageResource(R.drawable.man12);
-                Log.d(TAG, "Settato ImageMan12");
+                Log.d(TAG, "Set ImageMan12");
             }
         }
         else
         {
             if(0 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman1);
-                Log.d(TAG, "Settato ImageWoman1");
+                Log.d(TAG, "Set ImageWoman1");
             }
             else if(1 == drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman2);
-                Log.d(TAG, "Settato ImageWoman2");
+                Log.d(TAG, "Set ImageWoman2");
             }
             else if((Math.ceil(2*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman3);
-                Log.d(TAG, "Settato ImageWoman3");
+                Log.d(TAG, "Set ImageWoman3");
             }
             else if((Math.ceil(3*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman4);
-                Log.d(TAG, "Settato ImageWoman4");
+                Log.d(TAG, "Set ImageWoman4");
             }
             else if((Math.ceil(4*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman5);
-                Log.d(TAG, "Settato ImageWoman5");
+                Log.d(TAG, "Set ImageWoman5");
             }
             else if((Math.ceil(5*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman6);
-                Log.d(TAG, "Settato ImageWoman6");
+                Log.d(TAG, "Set ImageWoman6");
             }
             else if((Math.ceil(6*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman7);
-                Log.d(TAG, "Settato ImageWoman7");
+                Log.d(TAG, "Set ImageWoman7");
             }
             else if((Math.ceil(7*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman8);
-                Log.d(TAG, "Settato ImageWoman8");
+                Log.d(TAG, "Set ImageWoman8");
             }
             else if((Math.ceil(8*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman9);
-                Log.d(TAG, "Settato ImageWoman9");
+                Log.d(TAG, "Set ImageWoman9");
             }
             else if((Math.ceil(9*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman10);
-                Log.d(TAG, "Settato ImageWoman10");
+                Log.d(TAG, "Set ImageWoman10");
             }
             else if((Math.ceil(10*totalGlasses/12) == drunkGlasses)) {
                 imageMan.setImageResource(R.drawable.woman11);
-                Log.d(TAG, "Settato ImageWoman11");
+                Log.d(TAG, "Set ImageWoman11");
             }
             else if(totalGlasses <= drunkGlasses) {
                 imageMan.setImageResource(R.drawable.woman12);
-                Log.d(TAG, "Settato ImageWoman12");
+                Log.d(TAG, "Set ImageWoman12");
             }
         }
 
@@ -380,5 +380,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-

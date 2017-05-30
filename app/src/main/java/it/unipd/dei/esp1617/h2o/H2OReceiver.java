@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Calendar;
 
 public class H2OReceiver extends BroadcastReceiver {
 
@@ -35,17 +36,19 @@ public class H2OReceiver extends BroadcastReceiver {
             i.putExtra(H2OService.RESCHEDULE, true);
             Log.d(TAG,"Reschedule intent created in Receiver");
             context.startService(i);
-            Log.d(TAG, "startService() chiamato");
+            Log.d(TAG, "startService() called");
         } else if (intent.getBooleanExtra(NOTIFICATION, false)) {
-            Log.d(TAG,"arrivato intent NOTIFICATION");
+            Log.d(TAG,"Arrived intent NOTIFICATION");
             getNotArray();
             int id = intent.getIntExtra(H2OService.ID, 24);
             NotificationTemplate nt = notArray[id];
-            NotificationHandler nHan = new NotificationHandler(context,nt);
-            nHan.displayReply();
+            Calendar c = Calendar.getInstance();
+            if(c.get(Calendar.HOUR_OF_DAY)==nt.getWhen().get(Calendar.HOUR_OF_DAY)){          //risoluzione bug notifiche multiple
+                NotificationHandler nHan = new NotificationHandler(context,nt);
+                nHan.displayReply();
+                Log.d(TAG, "notificata notifica "+id);
+            }
 
-
-            Log.d(TAG, "notificata notifica "+id);
         }
     }
 
@@ -61,7 +64,7 @@ public class H2OReceiver extends BroadcastReceiver {
             }
             ois.close();
             fis.close();
-            Log.d(TAG, "Recupero array riuscito");
+            Log.d(TAG, "Array recovery : OK");
         }
         catch(FileNotFoundException e){
             Log.d(TAG, context.getApplicationContext().getApplicationContext().getResources().getString(R.string.file_not_found));

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.NotificationCompat;
@@ -57,7 +58,7 @@ import android.support.v7.app.NotificationCompat;
                         .setAllowGeneratedReplies(true)
                         .build();
 
-        String str="";
+        String str;
         if(!lessNot){
             str="1 glass";
             if(nt.getNumberOfGlasses()==2){
@@ -80,6 +81,8 @@ import android.support.v7.app.NotificationCompat;
                 .setStyle(style)
                 .setContentIntent(pIntent)
                 .addAction(directReplayAction)
+                .setVibrate(new long[] { 1000, 1000 })
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .build();
 
         noti.flags |= Notification.FLAG_AUTO_CANCEL;

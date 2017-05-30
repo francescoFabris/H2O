@@ -29,7 +29,7 @@ public class H2OService extends Service{
 
     public void onCreate(){
         alMan = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Log.d(TAG,"service creato");
+        Log.d(TAG,"Service created");
     }
 
     /**
@@ -45,7 +45,7 @@ public class H2OService extends Service{
         Log.d(TAG,"onStartCommand called");
         if(intent==null || intent.getBooleanExtra(RESCHEDULE, false)){//GENERA ERRORE  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             scheduleNotifications();
-            Log.d(TAG,"notifiche schedulate");
+            Log.d(TAG,"Notifications scheduled");
         }
         return Service.START_STICKY;
     }
@@ -103,7 +103,7 @@ public class H2OService extends Service{
                 }
                 alMan.set(AlarmManager.RTC_WAKEUP, when, pendingIntent);
                 alMan.setRepeating(AlarmManager.RTC_WAKEUP, when,24*60*60*1000, pendingIntent);
-                Log.d(TAG,"alarm schedulato n"+i+" mancano "+ ((when-Calendar.getInstance().getTime().getTime())/1000)+ " secondi");
+                Log.d(TAG,"Scheduled alarm #"+i+" in "+ ((when-Calendar.getInstance().getTime().getTime())/1000)+ " seconds");
             }
         }
     }

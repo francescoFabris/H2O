@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -250,7 +249,7 @@ public class InputActivity extends AppCompatActivity
         boolean sport = checkSport.isChecked();
         TextView spaceWake=(TextView) findViewById(R.id.wake_time);
         TextView spaceSleep=(TextView) findViewById(R.id.sleep_time);
-        Log.d(TAG,name+" uomo=" +male+" anni="+age+" peso="+weight+" sport="+sport);
+        Log.d(TAG,name+" male=" +male+" age="+age+" weight="+weight+" sport="+sport);
         if(preferences.getInt("age_value",0)!=age ||preferences.getBoolean("male_value",false)!=male){
             modificationsHaveOccurred=true;
         }
@@ -287,7 +286,7 @@ public class InputActivity extends AppCompatActivity
 
         //salvataggio in mutua esclusione
         editor.commit();
-        Log.d(TAG, "Salvataggio in mutua esclusione");
+        Log.d(TAG, "MUTEX data backup : OK");
     }
 
     /**
@@ -336,24 +335,15 @@ public class InputActivity extends AppCompatActivity
         else if(age<10) quantity=1200;
         else if(age<12) quantity=1400;
         else{
-            if(male){
-                quantity=1600;
-                if(age>16)
-                    quantity+=200;
-                if(sport)
-                    quantity+=400;
-                if(weight>80)
-                    quantity+=200;
-            }
-            else{
-                quantity=1400;
-                if(age>16)
-                    quantity+=200;
-                if(sport)
-                    quantity+=400;
-                if(weight>70)
-                    quantity+=200;
-            }
+            quantity=1600;
+            if(age>16)
+                quantity+=200;
+            if(sport)
+                quantity+=200;
+            if(weight>80)
+                quantity+=200;
+            if(male)
+                quantity+=200;
         }
         return quantity;
     }
@@ -406,11 +396,11 @@ public class InputActivity extends AppCompatActivity
 
 
             notArray[wakeH+2]= new NotificationTemplate(0, c0, q);
-            Log.d(TAG,"notifica 0 "+ c0.getTime().getHours()+ ":"+c0.getTime().getMinutes()+" bicchieri ="+q);
+            Log.d(TAG,"Notification 0 "+ c0.get(Calendar.HOUR_OF_DAY)+ ":"+c0.get(Calendar.MINUTE)+" glasses ="+q);
             notArray[wakeH+6]= new NotificationTemplate(1, c1, q);
-            Log.d(TAG,"notifica 1 "+ c1.getTime().getHours()+ ":"+c1.getTime().getMinutes()+" bicchieri ="+q);
+            Log.d(TAG,"Notification 1 "+ c1.get(Calendar.HOUR_OF_DAY)+ ":"+c1.get(Calendar.MINUTE)+" glasses ="+q);
             notArray[wakeH+11]= new NotificationTemplate(2, c2, q);
-            Log.d(TAG,"notifica 2 "+ c2.getTime().getHours()+ ":"+c2.getTime().getMinutes()+" bicchieri ="+q);
+            Log.d(TAG,"Notification 2 "+ c2.get(Calendar.HOUR_OF_DAY)+ ":"+c2.get(Calendar.MINUTE)+" glasses ="+q);
         }
         else{
             if(wakeH<sleepH){
@@ -474,7 +464,7 @@ public class InputActivity extends AppCompatActivity
                         }
                     }
                     notArray[i]= new NotificationTemplate(i, c, q);
-                    Log.d(TAG,"notifica "+i+" "+ c.getTime().getHours()+ ":"+c.getTime().getMinutes()+" bicchieri ="+q);
+                    Log.d(TAG,"Notification "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
                 }
             }
             else{
@@ -491,17 +481,6 @@ public class InputActivity extends AppCompatActivity
                         else
                             c.set(Calendar.MINUTE, wakeM+10);
                     }
-                    if(i==sleepH){
-                        if(sleepM<10)
-                        {
-                            c.set(Calendar.HOUR_OF_DAY,i-1);
-                            c.set(Calendar.MINUTE, wakeM+50);
-                        }
-                        else{
-                            c.set(Calendar.MINUTE, sleepM-10);
-                        }
-                    }
-
                     //fisso quantità della notifica
                     int q=0;
 
@@ -539,21 +518,12 @@ public class InputActivity extends AppCompatActivity
                     }
 
                     notArray[i]= new NotificationTemplate(i, c, q);
-                    Log.d(TAG,"notifica "+i+" "+ c.getTime().getHours()+ ":"+c.getTime().getMinutes()+" bicchieri ="+q);
+                    Log.d(TAG,"Notificaton "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
                 }
                 for(int i=0; i< sleepH+1; i++){
                     Calendar c = Calendar.getInstance();
                     c.set(Calendar.HOUR_OF_DAY,i);
                     c.set(Calendar.MINUTE, 30);
-                    if(i==wakeH){
-                        if (wakeM>50)
-                        {
-                            c.set(Calendar.HOUR_OF_DAY,i+1);
-                            c.set(Calendar.MINUTE, wakeM-50);
-                        }
-                        else
-                            c.set(Calendar.MINUTE, wakeM+10);
-                    }
                     if(i==sleepH){
                         if(sleepM<10)
                         {
@@ -601,7 +571,7 @@ public class InputActivity extends AppCompatActivity
                         }
                     }
                     notArray[i]= new NotificationTemplate(i, c, q);
-                    Log.d(TAG,"notifica "+i+" "+ c.getTime().getHours()+ ":"+c.getTime().getMinutes()+" bicchieri ="+q);
+                    Log.d(TAG,"Notifiction "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
                 }
             }
 
@@ -623,7 +593,7 @@ public class InputActivity extends AppCompatActivity
             }
             oos.close();
             fos.close();
-            Log.d(TAG, "Storage NotificationTemplate eseguito");
+            Log.d(TAG, "Storage NotificationTemplate : OK");
         }
         catch(FileNotFoundException e){
             Log.d(TAG, getResources().getString(R.string.file_not_found));
