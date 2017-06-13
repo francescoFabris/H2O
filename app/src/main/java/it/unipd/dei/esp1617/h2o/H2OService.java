@@ -22,7 +22,7 @@ public class H2OService extends Service{
     private NotificationTemplate[] notArray = new NotificationTemplate[24];
 
 
-    private AlarmManager alMan; // alMan è un AlarmManager // alBan è un Cantante
+    private AlarmManager alMan;
 
     public H2OService() {
     }
@@ -43,7 +43,7 @@ public class H2OService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.d(TAG,"onStartCommand called");
-        if(intent==null || intent.getBooleanExtra(RESCHEDULE, false)){//GENERA ERRORE  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        if(intent==null || intent.getBooleanExtra(RESCHEDULE, false)){
             scheduleNotifications();
             Log.d(TAG,"Notifications scheduled");
         }
@@ -102,7 +102,7 @@ public class H2OService extends Service{
                     when+=24*60*60*1000;
                 }
                 alMan.set(AlarmManager.RTC_WAKEUP, when, pendingIntent);
-                alMan.setRepeating(AlarmManager.RTC_WAKEUP, when,24*60*60*1000, pendingIntent);
+                alMan.setRepeating(AlarmManager.RTC_WAKEUP, when,24*60*60*1000, pendingIntent);   // ripetizione giornaliera
                 Log.d(TAG,"Scheduled alarm #"+i+" in "+ ((when-Calendar.getInstance().getTime().getTime())/1000)+ " seconds");
             }
         }

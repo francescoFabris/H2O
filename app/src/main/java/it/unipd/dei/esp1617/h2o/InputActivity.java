@@ -33,7 +33,7 @@ import java.util.Calendar;
 public class InputActivity extends AppCompatActivity
 {
     private boolean toastNameSent,toastWeightSent;
-    private boolean modificationsHaveOccurred = false;
+    private boolean modificationsHaveOccurred;
     private NotificationTemplate[] notArray = new NotificationTemplate[24];
     private int hourS = -1, minS = -1, hourW = -1, minW = -1;
     private static final String TAG = "InputActivity";
@@ -255,20 +255,22 @@ public class InputActivity extends AppCompatActivity
         }
 
         //salvataggio dello stato persistente
-        editor.putInt("age_value",age);
-        editor.putInt("weight_value",weight);
-        editor.putBoolean("lessnot_value",lessnot);
-        editor.putBoolean("male_value",male);
         editor.putString("name_value",name);
-        editor.putBoolean("sport_value",sport);
-        editor.putInt("hour_w",hourW);
-        editor.putInt("min_w",minW);
-        editor.putInt("hour_s",hourS);
-        editor.putInt("min_s",minS);
-        editor.putString("time_wake", spaceWake.getText().toString());
-        editor.putString("time_sleep", spaceSleep.getText().toString());
+
 
         if(modificationsHaveOccurred){
+            editor.putInt("age_value",age);
+            editor.putInt("weight_value",weight);
+            editor.putBoolean("lessnot_value",lessnot);
+            editor.putBoolean("male_value",male);
+            editor.putBoolean("sport_value",sport);
+            editor.putInt("hour_w",hourW);
+            editor.putInt("min_w",minW);
+            editor.putInt("hour_s",hourS);
+            editor.putInt("min_s",minS);
+            editor.putString("time_wake", spaceWake.getText().toString());
+            editor.putString("time_sleep", spaceSleep.getText().toString());
+
             Log.d(TAG, "Modifications have occurred");
             int quantity = getQuantity(age, weight, male, sport);
             editor.putInt("quantity",quantity);
@@ -329,7 +331,7 @@ public class InputActivity extends AppCompatActivity
      * @return quantità d'acqua da consumare giornalmente
      */
     private int getQuantity(int age,int weight,boolean male,boolean sport){
-        int quantity; //quantità determinata in ml
+        int quantity; //quantità determinata in ml SEMPRE divisibile per 200
         if(age<=2) quantity=600;
         else if(age<5) quantity=800;
         else if(age<10) quantity=1200;
@@ -340,9 +342,12 @@ public class InputActivity extends AppCompatActivity
                 quantity+=200;
             if(sport)
                 quantity+=200;
-            if(weight>80)
+            if(male){
                 quantity+=200;
-            if(male)
+                if(weight>80)
+                    quantity+=200;
+            }
+            else if(weight >65)
                 quantity+=200;
         }
         return quantity;
@@ -363,8 +368,8 @@ public class InputActivity extends AppCompatActivity
     private void fillNotArray(int quantity, boolean lessnot, int wakeH, int wakeM, int sleepH, int sleepM, boolean male,int age){
         int hour = sleepH- wakeH;//se si va a letto dopo mezzanotte, hour diventa negativo. Risoluzione riga successiva
         hour = (hour<0)?(24+hour):(hour);
-        Log.d(TAG, "hour="+hour);
 
+        Log.d(TAG, "hour="+hour);
         Log.d(TAG, "quantity="+quantity);
 
         if(lessnot)
@@ -383,23 +388,36 @@ public class InputActivity extends AppCompatActivity
             c2.set(Calendar.MINUTE, 30);
 
             //fisso la quantità di bicchieri per notifica
-            int glasses = (quantity-(quantity%150))/150+1;
+            int glasses = (quantity-(quantity%200))/200+1;  //prima era 150
             int q;
             switch (glasses%3){
-                case 1:  q = (glasses+1)/3;
+                case 1:  q = (glasses+2)/3;
                     break;
-                case 2:  q = (glasses+2)/3;
+                case 2:  q = (glasses+1)/3;
                     break;
                 default: q=(glasses)/3;
                     break;
             }
 
 
-            notArray[wakeH+2]= new NotificationTemplate(0, c0, q);
+            int index;
+            index =wakeH+2;
+            if(index>23){
+                index -=24;
+            }
+            notArray[index]= new NotificationTemplate(0, c0, q);
             Log.d(TAG,"Notification 0 "+ c0.get(Calendar.HOUR_OF_DAY)+ ":"+c0.get(Calendar.MINUTE)+" glasses ="+q);
-            notArray[wakeH+6]= new NotificationTemplate(1, c1, q);
+            index =wakeH+6;
+            if(index>23){
+                index -=24;
+            }
+            notArray[index]= new NotificationTemplate(1, c1, q);
             Log.d(TAG,"Notification 1 "+ c1.get(Calendar.HOUR_OF_DAY)+ ":"+c1.get(Calendar.MINUTE)+" glasses ="+q);
-            notArray[wakeH+11]= new NotificationTemplate(2, c2, q);
+            index =wakeH+11;
+            if(index>23){
+                index -=24;
+            }
+            notArray[index]= new NotificationTemplate(2, c2, q);
             Log.d(TAG,"Notification 2 "+ c2.get(Calendar.HOUR_OF_DAY)+ ":"+c2.get(Calendar.MINUTE)+" glasses ="+q);
         }
         else{
@@ -429,40 +447,7 @@ public class InputActivity extends AppCompatActivity
                         }
                     }
                     //fisso quantità della notifica
-                    int q=0;
-
-                    if(age<5){
-                        if((i-wakeH)%3==0)
-                            q=1;
-                    }
-                    else if(age<12){
-                        if((i-wakeH)%2==0)
-                            q=1;
-                    }
-                    else{
-                        if (male) {
-                            if(quantity<2100){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%2==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                        else{
-                            if(quantity<1900){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%3==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                    }
+                    int q = glasses(i,wakeH, age, quantity, male);
                     notArray[i]= new NotificationTemplate(i, c, q);
                     Log.d(TAG,"Notification "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
                 }
@@ -482,40 +467,8 @@ public class InputActivity extends AppCompatActivity
                             c.set(Calendar.MINUTE, wakeM+10);
                     }
                     //fisso quantità della notifica
-                    int q=0;
+                    int q = glasses(i,wakeH, age, quantity, male);
 
-                    if(age<5){
-                        if((i-wakeH)%3==0)
-                            q=1;
-                    }
-                    else if(age<12){
-                        if((i-wakeH)%2==0)
-                            q=1;
-                    }
-                    else{
-                        if (male) {
-                            if(quantity<2100){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%2==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                        else{
-                            if(quantity<1900){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%3==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                    }
 
                     notArray[i]= new NotificationTemplate(i, c, q);
                     Log.d(TAG,"Notificaton "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
@@ -536,40 +489,8 @@ public class InputActivity extends AppCompatActivity
                     }
 
                     //fisso quantità della notifica
-                    int q=0;
+                    int q = glasses(i,wakeH, age, quantity, male);
 
-                    if(age<5){
-                        if((i-wakeH)%3==0)
-                            q=1;
-                    }
-                    else if(age<12){
-                        if((i-wakeH)%2==0)
-                            q=1;
-                    }
-                    else{
-                        if (male) {
-                            if(quantity<2100){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%2==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                        else{
-                            if(quantity<1900){
-                                q=1;
-                            }
-                            else{
-                                if((i-wakeH)%3==0)
-                                    q=2;
-                                else
-                                    q=1;
-                            }
-                        }
-                    }
                     notArray[i]= new NotificationTemplate(i, c, q);
                     Log.d(TAG,"Notifiction "+i+" "+ c.get(Calendar.HOUR_OF_DAY)+ ":"+c.get(Calendar.MINUTE)+" glasses ="+q);
                 }
@@ -601,5 +522,52 @@ public class InputActivity extends AppCompatActivity
         catch (IOException e){
             Log.d(TAG, getResources().getString(R.string.io_exception));
         }
+    }
+
+    /**
+     * determino il numero di bicchieri da bere all'ora i-esima della giornata
+     * @param i
+     * @param wakeH
+     * @param age
+     * @param quantity
+     * @param male
+     * @return
+     */
+    private int glasses(int i,int wakeH,int age,int quantity, boolean male){
+        int q=0;
+
+        if(age<5){
+            if((i-wakeH)%3==0)//notifica un'ora ogni tre
+                q=1;
+        }
+        else if(age<12){
+            if((i-wakeH)%2==0)//notifica un'ora ogni due
+                q=1;
+        }
+        else{
+            if (male) {
+                if(quantity<2100){
+                    q=1;
+                }
+                else{
+                    if((i-wakeH)%2==0)//notifica il doppio un'ora ogni due
+                        q=2;
+                    else
+                        q=1;
+                }
+            }
+            else{
+                if(quantity<1900){
+                    q=1;
+                }
+                else{
+                    if((i-wakeH)%3==0) //notifica il doppio un'ora ogni tre
+                        q=2;
+                    else
+                        q=1;
+                }
+            }
+        }
+        return q;
     }
 }

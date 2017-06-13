@@ -37,16 +37,19 @@ public class H2OReceiver extends BroadcastReceiver {
             Log.d(TAG,"Reschedule intent created in Receiver");
             context.startService(i);
             Log.d(TAG, "startService() called");
-        } else if (intent.getBooleanExtra(NOTIFICATION, false)) {
+        }
+        else if (intent.getBooleanExtra(NOTIFICATION, false)) {
             Log.d(TAG,"Arrived intent NOTIFICATION");
             getNotArray();
             int id = intent.getIntExtra(H2OService.ID, 24);
             NotificationTemplate nt = notArray[id];
-            Calendar c = Calendar.getInstance();
-            if(c.get(Calendar.HOUR_OF_DAY)==nt.getWhen().get(Calendar.HOUR_OF_DAY)){          //risoluzione bug notifiche multiple
-                NotificationHandler nHan = new NotificationHandler(context,nt);
-                nHan.displayReply();
-                Log.d(TAG, "notificata notifica "+id);
+            if(nt!=null){                               //ulteriore controllo
+                Calendar c = Calendar.getInstance();
+                if(c.get(Calendar.HOUR_OF_DAY)==nt.getWhen().get(Calendar.HOUR_OF_DAY)) {          //risoluzione bug notifiche multiple
+                    NotificationHandler nHan = new NotificationHandler(context, nt);
+                    nHan.displayReply();
+                    Log.d(TAG, "notificata notifica " + id);
+                }
             }
 
         }

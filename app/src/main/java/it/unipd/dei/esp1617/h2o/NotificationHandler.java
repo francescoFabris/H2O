@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 /**
  * Created by boemd on 19/05/2017.
@@ -25,7 +26,13 @@ import android.support.v7.app.NotificationCompat;
     SharedPreferences preferences;
     public static final String KEY_TEXT_REPLY = "key_text_reply";
     private String name;
+    private static final String TAG = "NotificationHAndler";
 
+    /**
+     * inizializzazione variabili da parametri passati in input e da DefaultSharedPreferences
+     * @param context
+     * @param nt
+     */
     public NotificationHandler(Context context, NotificationTemplate nt){
         this.context=context;
         this.nt = nt;
@@ -37,57 +44,51 @@ import android.support.v7.app.NotificationCompat;
     }
 
     public void displayReply(){
-        PendingIntent pIntent = PendingIntent.getActivity(context,
-                (int) System.currentTimeMillis(),
-                new Intent(context, MainActivity.class), 0);
-
-        RemoteInput remoteInput = new RemoteInput.Builder(KEY_TEXT_REPLY)
-                .setLabel("How many glasses have you drunk?")
-                .build();
-
+        Log.d(TAG, "displayReply() called");
+        //intent che viene inviato a MainActivity
         Intent in = new Intent(context, MainActivity.class);
         in.putExtra("ID",nt.getId());
 
-        PendingIntent directReplayIntent = PendingIntent.getActivity(context,
-                (int) System.currentTimeMillis(),
-                in, 0);
+        PendingIntent directReplayIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), in, 0);
 
+        //azione di risposta con RemoteInput(oggetto che specifica l'input e invia intent)
         NotificationCompat.Action directReplayAction =
                 new NotificationCompat.Action.Builder(R.mipmap.ic_launcher, "Reply", directReplayIntent)
-                        .addRemoteInput(remoteInput)
+                        .addRemoteInput(new RemoteInput.Builder(KEY_TEXT_REPLY)
+                                .setLabel("How many glasses have you drunk?")
+                                .build())
                         .setAllowGeneratedReplies(true)
                         .build();
+        Log.d(TAG, "Action created");
 
+        //costruzione stringa da notificare
         String str;
         if(!lessNot){
             str="1 glass";
             if(nt.getNumberOfGlasses()==2){
                 str="2 glasses";
             }
+            if(nt.getNumberOfGlasses()==3){
+                str="3 glasses";
+            }
         }
         else{
             str = nt.getNumberOfGlasses() +"glasses";
         }
 
-        android.support.v4.app.NotificationCompat.MessagingStyle style = new NotificationCompat.MessagingStyle("Me")
-                .setConversationTitle("Hey "+name+", it's time to drink "+str+" of water!");
-
+        //assemblaggio notifica
         Notification noti = new NotificationCompat.Builder(context)
-                .setContentText("ContentText")
-                .setAutoCancel(false)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                        R.mipmap.ic_launcher))
+                .setContentText("Hey "+name+", drink "+str+" of water!")
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setStyle(style)
-                .setContentIntent(pIntent)
                 .addAction(directReplayAction)
-                .setVibrate(new long[] { 1000, 1000 })
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(new long[] { 1000, 500,1000 })  //permission richiesta nel Manifest
+                .setAutoCancel(true)
                 .build();
-
-        noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
+        Log.d(TAG, "Notification assembled");
+        //notifica all'utente
         nMan.notify(nt.getId(), noti);
+        Log.d(TAG, "Notified " +nt.getId());
     }
 
     public void dismissDirectReplayNotification(int id) {

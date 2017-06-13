@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton faminus;
     private Button option;
     private Button setZero;
+    private ImageView iGlass;
 
     /**
      * vengono inizializzati i vari widget e settati i vari listener
@@ -94,6 +95,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 decrementGlasses();
+            }
+        });
+
+        iGlass=(ImageView)findViewById(R.id.imageViewGlass) ;
+        iGlass.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v){
+                NotificationTemplate nt = new NotificationTemplate(25,null,3);
+                NotificationHandler nHan = new NotificationHandler(getApplicationContext(), nt);
+                nHan.displayReply();
+                Log.d(TAG, "notificata notifica DI PROVA");
+                return true;
             }
         });
 
@@ -166,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         int drunkMl = drunkGlasses*200;
         String toShow = Integer.toString(drunkMl) + " ml / "+quantity+" ml";
         tv2.setText(toShow);
-        tv4.setText((drunkGlasses>8)?R.string.c2:R.string.c1);
+        tv4.setText((drunkGlasses>3*quantity/5)?R.string.c2:R.string.c1);
         changeImageDonut();
 
     }
@@ -341,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
-                        .setTarget(faminus)
+                        .setTarget(faplus)
                         .setDismissText("GOT IT")
                         .setContentText("ADD 1 GLASS (200ml)")
                         .build()
@@ -349,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(this)
-                        .setTarget(faplus)
+                        .setTarget(faminus)
                         .setDismissText("GOT IT")
                         .setContentText("REMOVE 1 GLASS (200ml)")
                         .build()
@@ -368,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(option)
                         .setDismissText("GOT IT")
-                        .setContentText("NOW, FIRST, INSERT YOU DATA")
+                        .setContentText("BUT FIRST INSERT YOUR DATA")
                         .withRectangleShape()
                         .build()
         );
